@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String addTaskInputValue = '';
 
   getAllTasks() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 250));
     return db.collection('tasks').get();
   }
 
@@ -23,6 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
     id ??= DateTime.now().millisecondsSinceEpoch.toString();
 
     return await db.collection('tasks').doc(id).set({'id': id, 'title': title});
+  }
+
+  deleteTask({required String id}) {
+    db.collection('tasks').doc(id).delete();
   }
 
   @override
@@ -92,7 +96,17 @@ class _HomeScreenState extends State<HomeScreen> {
               return ListView.builder(
                 itemCount: tasks.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return TaskComponent(tasks[index]['title']);
+                  return TaskComponent(
+                    title: tasks[index]['title'],
+                    onChecked: () async {
+                      await Future.delayed(const Duration(milliseconds: 250));
+
+                      deleteTask(id: tasks[index]['id']);
+
+                      // refresh task list
+                      setState(() {});
+                    },
+                  );
                 },
               );
             }
