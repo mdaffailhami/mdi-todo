@@ -12,9 +12,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  getAllTasks() {
-    // setTask(title: 'Aowkwkw');
-    // setTask(title: 'UWUWUWU');
+  String addTaskInputValue = '';
+
+  getAllTasks() async {
+    await Future.delayed(const Duration(milliseconds: 500));
     return db.collection('tasks').get();
   }
 
@@ -32,17 +33,56 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add Task',
-        onPressed: () {},
+        onPressed: () {
+          addTaskInputValue = '';
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Add new task'),
+                content: TextField(
+                  autofocus: true,
+                  decoration:
+                      const InputDecoration(hintText: 'Enter task here..'),
+                  onChanged: (value) => addTaskInputValue = value,
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        setTask(title: addTaskInputValue);
+                        Navigator.of(context).pop();
+
+                        // Refresh task list
+                        setState(() {});
+                      },
+                      child: const Text('ADD')),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('CANCEL'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
         child: const Icon(Icons.add),
       ),
       body: FutureBuilder(
         future: getAllTasks(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('LOADING..');
+            return const Center(child: CircularProgressIndicator());
           } else {
             if (!snapshot.hasData) {
-              return const Text('TASK EMPTY!');
+              // Jika tidak ada tasks
+              return Center(
+                child: Text(
+                  'No tasks!',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              );
             } else {
               List tasks = [];
               snapshot.data.forEach((String key, dynamic value) {
