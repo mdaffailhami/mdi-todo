@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mdi_todo/model/task.model.dart';
 
-// ignore: must_be_immutable
 class AddTaskComponent extends StatelessWidget {
-  void Function()? onAddButtonPressed;
-  void Function()? onCancelButtonPressed;
+  final void Function()? onCancelButtonPressed;
+  final void Function(TaskModel data)? onAddButtonPressed;
 
-  AddTaskComponent({Key? key}) : super(key: key);
+  AddTaskComponent({
+    Key? key,
+    this.onCancelButtonPressed,
+    this.onAddButtonPressed,
+  }) : super(key: key);
 
   final TextEditingController titleInputController = TextEditingController();
 
@@ -20,7 +24,14 @@ class AddTaskComponent extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          onPressed: onAddButtonPressed,
+          onPressed: () {
+            onAddButtonPressed!(
+              TaskModel(
+                id: DateTime.now().millisecondsSinceEpoch.toString(),
+                title: titleInputController.text,
+              ),
+            );
+          },
           child: const Text('ADD'),
         ),
         TextButton(

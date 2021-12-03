@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:mdi_todo/model/task.model.dart';
 
-// ignore: must_be_immutable
 class EditTaskComponent extends StatefulWidget {
-  String? title;
+  final TaskModel data;
+  final void Function()? onCancelButtonPressed;
+  final void Function(TaskModel data)? onSaveButtonPressed;
+  final void Function()? onDeleteButtonPressed;
 
-  EditTaskComponent({Key? key, this.title = ''}) : super(key: key);
-
-  void Function()? onSaveButtonPressed;
-  void Function()? onCancelButtonPressed;
-  void Function()? onDeleteButtonPressed;
-
-  late TextEditingController titleInputController;
+  const EditTaskComponent({
+    Key? key,
+    required this.data,
+    this.onCancelButtonPressed,
+    this.onSaveButtonPressed,
+    this.onDeleteButtonPressed,
+  }) : super(key: key);
 
   @override
   State<EditTaskComponent> createState() => _EditTaskComponentState();
 }
 
 class _EditTaskComponentState extends State<EditTaskComponent> {
+  TextEditingController titleInputController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    widget.titleInputController = TextEditingController(text: widget.title);
+    titleInputController = TextEditingController(text: widget.data.title);
   }
 
   @override
@@ -41,13 +46,20 @@ class _EditTaskComponentState extends State<EditTaskComponent> {
         ],
       ),
       content: TextField(
-        controller: widget.titleInputController,
+        controller: titleInputController,
         autofocus: true,
         decoration: const InputDecoration(hintText: 'Enter task here..'),
       ),
       actions: [
         TextButton(
-          onPressed: widget.onSaveButtonPressed,
+          onPressed: () {
+            widget.onSaveButtonPressed!(
+              TaskModel(
+                id: widget.data.id,
+                title: titleInputController.text,
+              ),
+            );
+          },
           child: const Text('SAVE'),
         ),
         TextButton(

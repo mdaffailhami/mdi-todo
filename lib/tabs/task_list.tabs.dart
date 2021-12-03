@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
 import 'package:mdi_todo/components/add_task.component.dart';
+import 'package:mdi_todo/components/delete_task_confirmation.component.dart';
 import 'package:mdi_todo/components/edit_task.component.dart';
 import 'package:mdi_todo/components/task.component.dart';
+import 'package:mdi_todo/model/task.model.dart';
 
 final Localstore db = Localstore.instance;
 
@@ -25,7 +27,7 @@ class _TaskListTabState extends State<TaskListTab> {
               return const Center(child: CircularProgressIndicator());
             } else {
               if (!snapshot.hasData) {
-                // Jika tidak ada tasks
+                // Jika data == null
                 return Center(
                   child: Text(
                     'No tasks',
@@ -36,6 +38,7 @@ class _TaskListTabState extends State<TaskListTab> {
                   ),
                 );
               } else {
+                // Jika data != null
                 List tasks = [];
                 snapshot.data.forEach((String key, dynamic value) {
                   tasks.add(value);
@@ -44,86 +47,81 @@ class _TaskListTabState extends State<TaskListTab> {
                 return ListView.builder(
                   itemCount: tasks.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final String taskId = tasks[index]['id'];
-                    final String taskTitle = tasks[index]['title'];
+                    final TaskModel task = TaskModel(
+                        id: tasks[index]['id'], title: tasks[index]['title']);
 
                     return TaskComponent(
-                      title: taskTitle,
+                      title: task.title,
                       onChecked: () async {
                         await Future.delayed(const Duration(milliseconds: 300));
 
+                        // Hapus task di collection "finishedTask"
                         await db
                             .collection('finishedTasks')
-                            .doc(taskId)
-                            .set({'id': taskId, 'title': taskTitle});
-                        db.collection('tasks').doc(taskId).delete();
+                            .doc(task.id)
+                            .set({'id': task.id, 'title': task.title});
 
+                        // Tambah task di collection "tasks"
+                        db.collection('tasks').doc(task.id).delete();
+
+                        // Refresh tasks
                         setState(() {});
                       },
                       onTap: () {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            final EditTaskComponent editTaskComponent =
-                                EditTaskComponent(
-                              title: taskTitle,
+                            return EditTaskComponent(
+                              data: TaskModel(id: task.id, title: task.title),
+                              onCancelButtonPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              onSaveButtonPressed: (TaskModel data) {
+                                // Edit task
+                                db.collection('tasks').doc(task.id).set(
+                                  {
+                                    'id': data.id,
+                                    'title': data.title,
+                                  },
+                                );
+
+                                // Close EditTaskComponent
+                                Navigator.of(context).pop();
+
+                                // Refresh tasks
+                                setState(() {});
+                              },
+                              onDeleteButtonPressed: () {
+                                // Show delete confirmation
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return DeleteTaskConfirmation(
+                                      onNoButtonPressed: () {
+                                        // Close Delete Confirmation
+                                        Navigator.of(context).pop();
+                                      },
+                                      onYesButtonPressed: () {
+                                        // Delete task
+                                        db
+                                            .collection('tasks')
+                                            .doc(task.id)
+                                            .delete();
+
+                                        // Close Delete Confirmation
+                                        Navigator.of(context).pop();
+
+                                        // Close EditTaskComponent
+                                        Navigator.of(context).pop();
+
+                                        // Refresh tasks
+                                        setState(() {});
+                                      },
+                                    );
+                                  },
+                                );
+                              },
                             );
-
-                            editTaskComponent.onSaveButtonPressed = () {
-                              final String titleInputValue =
-                                  editTaskComponent.titleInputController.text;
-
-                              // Edit task
-                              db.collection('tasks').doc(taskId).set(
-                                {
-                                  'id': taskId,
-                                  'title': titleInputValue,
-                                },
-                              );
-
-                              Navigator.of(context).pop();
-                              setState(() {});
-                            };
-
-                            editTaskComponent.onCancelButtonPressed = () {
-                              Navigator.of(context).pop();
-                            };
-
-                            editTaskComponent.onDeleteButtonPressed = () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text(
-                                        'Are you sure you want to delete this task?'),
-                                    actionsAlignment: MainAxisAlignment.center,
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          db
-                                              .collection('tasks')
-                                              .doc(taskId)
-                                              .delete();
-
-                                          Navigator.of(context).pop();
-                                          Navigator.of(context).pop();
-
-                                          setState(() {});
-                                        },
-                                        child: const Text('Yes'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('No'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            };
-                            return editTaskComponent;
                           },
                         );
                       },
@@ -144,29 +142,19 @@ class _TaskListTabState extends State<TaskListTab> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    final AddTaskComponent addTaskComponent =
-                        AddTaskComponent();
+                    return AddTaskComponent(
+                      onCancelButtonPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      onAddButtonPressed: (TaskModel data) async {
+                        await db.collection('tasks').doc(data.id).set(
+                          {'id': data.id, 'title': data.title},
+                        );
 
-                    addTaskComponent.onAddButtonPressed = () async {
-                      final String taskId =
-                          DateTime.now().millisecondsSinceEpoch.toString();
-
-                      final String titleInputValue =
-                          addTaskComponent.titleInputController.text;
-
-                      await db.collection('tasks').doc(taskId).set(
-                        {'id': taskId, 'title': titleInputValue},
-                      );
-
-                      Navigator.of(context).pop();
-                      setState(() {});
-                    };
-
-                    addTaskComponent.onCancelButtonPressed = () {
-                      Navigator.of(context).pop();
-                    };
-
-                    return addTaskComponent;
+                        Navigator.of(context).pop();
+                        setState(() {});
+                      },
+                    );
                   },
                 );
               },
