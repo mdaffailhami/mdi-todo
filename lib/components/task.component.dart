@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class TaskComponent extends StatelessWidget {
   final String title;
-  final void Function()? onChecked;
+  final void Function()? onCheck;
+  final void Function()? onTap;
 
   const TaskComponent({
     Key? key,
     this.title = '',
-    this.onChecked,
+    this.onCheck,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -16,23 +18,19 @@ class TaskComponent extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 1),
       child: ListTile(
         leading: CardCheckBox(
-          onChecked: onChecked,
+          onCheck: onCheck,
         ),
         title: Text(title),
-        trailing: IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: () {},
-          tooltip: 'Options',
-        ),
+        onTap: onTap,
       ),
     );
   }
 }
 
 class CardCheckBox extends StatefulWidget {
-  final void Function()? onChecked;
+  final void Function()? onCheck;
 
-  const CardCheckBox({Key? key, this.onChecked}) : super(key: key);
+  const CardCheckBox({Key? key, this.onCheck}) : super(key: key);
 
   @override
   _CardCheckBoxState createState() => _CardCheckBoxState();
@@ -46,7 +44,7 @@ class _CardCheckBoxState extends State<CardCheckBox> {
     return Checkbox(
       value: isChecked,
       onChanged: (bool? value) {
-        widget.onChecked!();
+        widget.onCheck!();
 
         setState(() {
           isChecked = value;

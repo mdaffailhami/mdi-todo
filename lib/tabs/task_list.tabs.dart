@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
 import 'package:mdi_todo/components/add_task.component.dart';
+import 'package:mdi_todo/components/edit_task.component.dart';
 import 'package:mdi_todo/components/task.component.dart';
 
 final Localstore db = Localstore.instance;
@@ -59,13 +60,30 @@ class _TaskListTabState extends State<TaskListTab> {
                   itemBuilder: (BuildContext context, int index) {
                     return TaskComponent(
                       title: tasks[index]['title'],
-                      onChecked: () async {
+                      onCheck: () async {
                         await Future.delayed(const Duration(milliseconds: 250));
 
                         deleteTask(id: tasks[index]['id']);
-
-                        // refresh task list
                         setState(() {});
+                      },
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return EditTaskComponent(
+                              title: tasks[index]['title'],
+                              onSubmit: (Map<String, dynamic> value) {
+                                setTask(
+                                  id: tasks[index]['id'],
+                                  title: value['title'],
+                                );
+
+                                Navigator.of(context).pop();
+                                setState(() {});
+                              },
+                            );
+                          },
+                        );
                       },
                     );
                   },
