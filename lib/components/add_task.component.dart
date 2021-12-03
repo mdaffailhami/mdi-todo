@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AddTaskComponent extends StatelessWidget {
-  final void Function(Map<String, dynamic> value)? onSubmit;
+  void Function()? onAddButtonPressed;
+  void Function()? onCancelButtonPressed;
 
-  AddTaskComponent({Key? key, this.onSubmit}) : super(key: key);
+  AddTaskComponent(
+      {Key? key, this.onAddButtonPressed, this.onCancelButtonPressed})
+      : super(key: key);
 
   final TextEditingController titleInputController = TextEditingController();
 
@@ -18,17 +21,11 @@ class AddTaskComponent extends StatelessWidget {
       ),
       actions: [
         TextButton(
-            onPressed: () {
-              final Map<String, dynamic> value = {
-                'title': titleInputController.text
-              };
-              onSubmit!(value);
-            },
-            child: const Text('ADD')),
+          onPressed: onAddButtonPressed,
+          child: const Text('ADD'),
+        ),
         TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: onCancelButtonPressed,
           child: const Text('CANCEL'),
         ),
       ],

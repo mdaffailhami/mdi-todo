@@ -23,7 +23,20 @@ class _EditTaskComponentState extends State<EditTaskComponent> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Edit your task'),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Your task'),
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.red[400],
+            ),
+            tooltip: 'Delete',
+            onPressed: () {},
+          ),
+        ],
+      ),
       content: TextField(
         controller: titleInputController,
         autofocus: true,

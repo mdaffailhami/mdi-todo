@@ -61,9 +61,10 @@ class _TaskListTabState extends State<TaskListTab> {
                     return TaskComponent(
                       title: tasks[index]['title'],
                       onCheck: () async {
-                        await Future.delayed(const Duration(milliseconds: 250));
+                        await Future.delayed(const Duration(milliseconds: 300));
 
                         deleteTask(id: tasks[index]['id']);
+
                         setState(() {});
                       },
                       onTap: () {
@@ -102,16 +103,29 @@ class _TaskListTabState extends State<TaskListTab> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return AddTaskComponent(
-                      onSubmit: (Map<String, dynamic> value) async {
-                        await setTask(title: value['title']);
+                    final AddTaskComponent addTaskComponent =
+                        AddTaskComponent();
 
-                        Navigator.of(context).pop();
+                    addTaskComponent.onAddButtonPressed = () async {
+                      final String taskId =
+                          DateTime.now().millisecondsSinceEpoch.toString();
 
-                        // Refresh task list
-                        setState(() {});
-                      },
-                    );
+                      final String taskTitle =
+                          addTaskComponent.titleInputController.text;
+
+                      await db.collection('tasks').doc(taskId).set(
+                        {'id': taskId, 'title': taskTitle},
+                      );
+
+                      Navigator.of(context).pop();
+                      setState(() {});
+                    };
+
+                    addTaskComponent.onCancelButtonPressed = () {
+                      Navigator.of(context).pop();
+                    };
+
+                    return addTaskComponent;
                   },
                 );
               },
