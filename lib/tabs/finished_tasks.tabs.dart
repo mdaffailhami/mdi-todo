@@ -7,7 +7,7 @@ class FinishedTasksTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        'Finished Tasks',
+        'No tasks finished!',
         style:
             Theme.of(context).textTheme.headline6?.copyWith(color: Colors.grey),
       ),

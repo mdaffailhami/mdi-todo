@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
+import 'package:mdi_todo/components/add_task.component.dart';
 import 'package:mdi_todo/components/task.component.dart';
 
 final Localstore db = Localstore.instance;
@@ -12,16 +13,7 @@ class TaskListTab extends StatefulWidget {
 }
 
 class _TaskListTabState extends State<TaskListTab> {
-  late String addTaskInputValue;
-
-  @override
-  void initState() {
-    super.initState();
-    addTaskInputValue = '';
-  }
-
-  Future<Map<String, dynamic>?> getAllTasks() async {
-    await Future.delayed(const Duration(milliseconds: 250));
+  Future<Map<String, dynamic>?> getAllTasks() {
     return db.collection('tasks').get();
   }
 
@@ -89,35 +81,18 @@ class _TaskListTabState extends State<TaskListTab> {
             child: FloatingActionButton(
               tooltip: 'Add Task',
               onPressed: () {
-                addTaskInputValue = '';
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Add new task'),
-                      content: TextField(
-                        autofocus: true,
-                        decoration: const InputDecoration(
-                            hintText: 'Enter task here..'),
-                        onChanged: (value) => addTaskInputValue = value,
-                      ),
-                      actions: [
-                        TextButton(
-                            onPressed: () async {
-                              await setTask(title: addTaskInputValue);
-                              Navigator.of(context).pop();
+                    return AddTaskComponent(
+                      onSubmit: (Map<String, dynamic> value) async {
+                        await setTask(title: value['title']);
 
-                              // Refresh task list
-                              setState(() {});
-                            },
-                            child: const Text('ADD')),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('CANCEL'),
-                        ),
-                      ],
+                        Navigator.of(context).pop();
+
+                        // Refresh task list
+                        setState(() {});
+                      },
                     );
                   },
                 );
