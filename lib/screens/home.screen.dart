@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
-import 'package:mdi_todo/tabs/finished_tasks.tabs.dart';
-import 'package:mdi_todo/tabs/task_list.tabs.dart';
+import 'package:mdi_todo/tabs/finished_tasks.tab.dart';
+import 'package:mdi_todo/tabs/task_list.tab.dart';
 
 final Localstore db = Localstore.instance;
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mdi_todo/model/task.model.dart';
+import 'package:mdi_todo/models/task.model.dart';
 
 class AddTaskComponent extends StatelessWidget {
   final void Function()? onCancelButtonPressed;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mdi_todo/model/task.model.dart';
+import 'package:mdi_todo/models/task.model.dart';
 
 class EditTaskComponent extends StatefulWidget {
   final TaskModel data;

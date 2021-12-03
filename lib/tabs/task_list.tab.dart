@@ -4,7 +4,7 @@ import 'package:mdi_todo/components/add_task.component.dart';
 import 'package:mdi_todo/components/delete_task_confirmation.component.dart';
 import 'package:mdi_todo/components/edit_task.component.dart';
 import 'package:mdi_todo/components/task.component.dart';
-import 'package:mdi_todo/model/task.model.dart';
+import 'package:mdi_todo/models/task.model.dart';
 
 final Localstore db = Localstore.instance;
 
