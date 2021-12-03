@@ -28,7 +28,7 @@ class _TaskListTabState extends State<TaskListTab> {
                 // Jika tidak ada tasks
                 return Center(
                   child: Text(
-                    'No tasks!',
+                    'No tasks',
                     style: Theme.of(context)
                         .textTheme
                         .headline6
