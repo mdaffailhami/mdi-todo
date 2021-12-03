@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class EditTaskComponent extends StatefulWidget {
-  final String? title;
-  final void Function(Map<String, dynamic> value)? onSubmit;
+  String? title;
 
-  const EditTaskComponent({Key? key, this.title, this.onSubmit})
-      : super(key: key);
+  EditTaskComponent({Key? key, this.title = ''}) : super(key: key);
+
+  void Function()? onSaveButtonPressed;
+
+  void Function()? onCancelButtonPressed;
+
+  late TextEditingController titleInputController;
 
   @override
   State<EditTaskComponent> createState() => _EditTaskComponentState();
 }
 
 class _EditTaskComponentState extends State<EditTaskComponent> {
-  late TextEditingController titleInputController;
-
   @override
   void initState() {
     super.initState();
-    titleInputController = TextEditingController(text: widget.title);
+    widget.titleInputController = TextEditingController(text: widget.title);
   }
 
   @override
@@ -38,23 +41,17 @@ class _EditTaskComponentState extends State<EditTaskComponent> {
         ],
       ),
       content: TextField(
-        controller: titleInputController,
+        controller: widget.titleInputController,
         autofocus: true,
         decoration: const InputDecoration(hintText: 'Enter task here..'),
       ),
       actions: [
         TextButton(
-            onPressed: () {
-              final Map<String, dynamic> value = {
-                'title': titleInputController.text
-              };
-              widget.onSubmit!(value);
-            },
-            child: const Text('SAVE')),
+          onPressed: widget.onSaveButtonPressed,
+          child: const Text('SAVE'),
+        ),
         TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: widget.onCancelButtonPressed,
           child: const Text('CANCEL'),
         ),
       ],

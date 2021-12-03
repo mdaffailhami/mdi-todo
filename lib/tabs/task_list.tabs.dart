@@ -60,7 +60,7 @@ class _TaskListTabState extends State<TaskListTab> {
                   itemBuilder: (BuildContext context, int index) {
                     return TaskComponent(
                       title: tasks[index]['title'],
-                      onCheck: () async {
+                      onChecked: () async {
                         await Future.delayed(const Duration(milliseconds: 300));
 
                         deleteTask(id: tasks[index]['id']);
@@ -71,18 +71,48 @@ class _TaskListTabState extends State<TaskListTab> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return EditTaskComponent(
+                            final EditTaskComponent editTaskComponent =
+                                EditTaskComponent(
                               title: tasks[index]['title'],
-                              onSubmit: (Map<String, dynamic> value) {
-                                setTask(
-                                  id: tasks[index]['id'],
-                                  title: value['title'],
-                                );
-
-                                Navigator.of(context).pop();
-                                setState(() {});
-                              },
                             );
+
+                            editTaskComponent.onSaveButtonPressed = () {
+                              final String taskId = tasks[index]['id'];
+                              final String titleInputValue =
+                                  editTaskComponent.titleInputController.text;
+
+                              // Edit task
+                              db
+                                  .collection('tasks')
+                                  .doc(tasks[index]['id'])
+                                  .set(
+                                {
+                                  'id': taskId,
+                                  'title': titleInputValue,
+                                },
+                              );
+
+                              Navigator.of(context).pop();
+                              setState(() {});
+                            };
+
+                            editTaskComponent.onCancelButtonPressed = () {
+                              Navigator.of(context).pop();
+                            };
+
+                            return editTaskComponent;
+                            // return EditTaskComponent(
+                            //   title: tasks[index]['title'],
+                            //   onSubmit: (Map<String, dynamic> value) {
+                            //     setTask(
+                            //       id: tasks[index]['id'],
+                            //       title: value['title'],
+                            //     );
+
+                            //     Navigator.of(context).pop();
+                            //     setState(() {});
+                            //   },
+                            // );
                           },
                         );
                       },
@@ -110,11 +140,11 @@ class _TaskListTabState extends State<TaskListTab> {
                       final String taskId =
                           DateTime.now().millisecondsSinceEpoch.toString();
 
-                      final String taskTitle =
+                      final String titleInputValue =
                           addTaskComponent.titleInputController.text;
 
                       await db.collection('tasks').doc(taskId).set(
-                        {'id': taskId, 'title': taskTitle},
+                        {'id': taskId, 'title': titleInputValue},
                       );
 
                       Navigator.of(context).pop();

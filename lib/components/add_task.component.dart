@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class AddTaskComponent extends StatelessWidget {
   void Function()? onAddButtonPressed;
   void Function()? onCancelButtonPressed;
 
-  AddTaskComponent(
-      {Key? key, this.onAddButtonPressed, this.onCancelButtonPressed})
-      : super(key: key);
+  AddTaskComponent({Key? key}) : super(key: key);
 
   final TextEditingController titleInputController = TextEditingController();
 
