@@ -7,8 +7,8 @@ class EditTaskComponent extends StatefulWidget {
   EditTaskComponent({Key? key, this.title = ''}) : super(key: key);
 
   void Function()? onSaveButtonPressed;
-
   void Function()? onCancelButtonPressed;
+  void Function()? onDeleteButtonPressed;
 
   late TextEditingController titleInputController;
 
@@ -36,7 +36,7 @@ class _EditTaskComponentState extends State<EditTaskComponent> {
               color: Colors.red[400],
             ),
             tooltip: 'Delete',
-            onPressed: () {},
+            onPressed: widget.onDeleteButtonPressed,
           ),
         ],
       ),

@@ -14,26 +14,12 @@ class TaskListTab extends StatefulWidget {
 }
 
 class _TaskListTabState extends State<TaskListTab> {
-  Future<Map<String, dynamic>?> getAllTasks() {
-    return db.collection('tasks').get();
-  }
-
-  Future<dynamic> setTask({String? id, required String title}) {
-    id ??= DateTime.now().millisecondsSinceEpoch.toString();
-
-    return db.collection('tasks').doc(id).set({'id': id, 'title': title});
-  }
-
-  Future<dynamic> deleteTask({required String id}) {
-    return db.collection('tasks').doc(id).delete();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         FutureBuilder(
-          future: getAllTasks(),
+          future: db.collection('tasks').get(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -58,12 +44,19 @@ class _TaskListTabState extends State<TaskListTab> {
                 return ListView.builder(
                   itemCount: tasks.length,
                   itemBuilder: (BuildContext context, int index) {
+                    final String taskId = tasks[index]['id'];
+                    final String taskTitle = tasks[index]['title'];
+
                     return TaskComponent(
-                      title: tasks[index]['title'],
+                      title: taskTitle,
                       onChecked: () async {
                         await Future.delayed(const Duration(milliseconds: 300));
 
-                        deleteTask(id: tasks[index]['id']);
+                        await db
+                            .collection('finishedTasks')
+                            .doc(taskId)
+                            .set({'id': taskId, 'title': taskTitle});
+                        db.collection('tasks').doc(taskId).delete();
 
                         setState(() {});
                       },
@@ -73,19 +66,15 @@ class _TaskListTabState extends State<TaskListTab> {
                           builder: (BuildContext context) {
                             final EditTaskComponent editTaskComponent =
                                 EditTaskComponent(
-                              title: tasks[index]['title'],
+                              title: taskTitle,
                             );
 
                             editTaskComponent.onSaveButtonPressed = () {
-                              final String taskId = tasks[index]['id'];
                               final String titleInputValue =
                                   editTaskComponent.titleInputController.text;
 
                               // Edit task
-                              db
-                                  .collection('tasks')
-                                  .doc(tasks[index]['id'])
-                                  .set(
+                              db.collection('tasks').doc(taskId).set(
                                 {
                                   'id': taskId,
                                   'title': titleInputValue,
@@ -100,19 +89,41 @@ class _TaskListTabState extends State<TaskListTab> {
                               Navigator.of(context).pop();
                             };
 
-                            return editTaskComponent;
-                            // return EditTaskComponent(
-                            //   title: tasks[index]['title'],
-                            //   onSubmit: (Map<String, dynamic> value) {
-                            //     setTask(
-                            //       id: tasks[index]['id'],
-                            //       title: value['title'],
-                            //     );
+                            editTaskComponent.onDeleteButtonPressed = () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                        'Are you sure you want to delete this task?'),
+                                    actionsAlignment: MainAxisAlignment.center,
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          db
+                                              .collection('tasks')
+                                              .doc(taskId)
+                                              .delete();
 
-                            //     Navigator.of(context).pop();
-                            //     setState(() {});
-                            //   },
-                            // );
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+
+                                          setState(() {});
+                                        },
+                                        child: const Text('Yes'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('No'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            };
+                            return editTaskComponent;
                           },
                         );
                       },
