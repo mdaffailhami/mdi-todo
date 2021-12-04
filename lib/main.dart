@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mdi_todo/screens/home.screen.dart';
+import 'package:mdi_todo/pages/home.page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomeScreen(),
+      home: const HomePage(),
     );
   }
 }
