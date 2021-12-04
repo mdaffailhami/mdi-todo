@@ -60,7 +60,7 @@ class _TaskListTabState extends State<TaskListTab> {
                         // Hapus task di collection "finishedTask"
                         await finishedTasksLocalstoreCollection
                             .doc(task.id)
-                            .set({'id': task.id, 'title': task.title});
+                            .set(task.toMap());
 
                         // Tambah task di collection "tasks"
                         tasksLocalstoreCollection.doc(task.id).delete();
@@ -79,12 +79,9 @@ class _TaskListTabState extends State<TaskListTab> {
                               },
                               onSaveButtonPressed: (TaskModel data) {
                                 // Edit task
-                                tasksLocalstoreCollection.doc(task.id).set(
-                                  {
-                                    'id': data.id,
-                                    'title': data.title,
-                                  },
-                                );
+                                tasksLocalstoreCollection
+                                    .doc(task.id)
+                                    .set(data.toMap());
 
                                 // Close EditTaskComponent
                                 Navigator.of(context).pop();
@@ -147,9 +144,9 @@ class _TaskListTabState extends State<TaskListTab> {
                         Navigator.of(context).pop();
                       },
                       onAddButtonPressed: (TaskModel data) async {
-                        await tasksLocalstoreCollection.doc(data.id).set(
-                          {'id': data.id, 'title': data.title},
-                        );
+                        await tasksLocalstoreCollection
+                            .doc(data.id)
+                            .set(data.toMap());
 
                         Navigator.of(context).pop();
                         setState(() {});

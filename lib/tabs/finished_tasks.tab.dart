@@ -3,6 +3,7 @@ import 'package:localstore/localstore.dart';
 import 'package:mdi_todo/components/finished_task.component.dart';
 import 'package:mdi_todo/localstore_collections/finished_tasks.localstore_collection.dart';
 import 'package:mdi_todo/localstore_collections/tasks.localstore_collection.dart';
+import 'package:mdi_todo/models/task.model.dart';
 
 final Localstore db = Localstore.instance;
 
@@ -41,18 +42,19 @@ class _FinishedTasksTabState extends State<FinishedTasksTab> {
             return ListView.builder(
               itemCount: tasks.length,
               itemBuilder: (BuildContext context, int index) {
-                final String taskId = tasks[index]['id'];
-                final String taskTitle = tasks[index]['title'];
+                final TaskModel task = TaskModel(
+                    id: tasks[index]['id'], title: tasks[index]['title']);
 
                 return FinishedTaskComponent(
-                  title: taskTitle,
+                  title: task.title,
                   onUnchecked: () async {
                     await Future.delayed(const Duration(milliseconds: 300));
 
                     await tasksLocalstoreCollection
-                        .doc(taskId)
-                        .set({'id': taskId, 'title': taskTitle});
-                    finishedTasksLocalstoreCollection.doc(taskId).delete();
+                        .doc(task.id)
+                        .set(task.toMap());
+
+                    finishedTasksLocalstoreCollection.doc(task.id).delete();
 
                     setState(() {});
                   },
