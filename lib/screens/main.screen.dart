@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
-import 'package:mdi_todo/tabs/finished_tasks.tab.dart';
-import 'package:mdi_todo/tabs/task_list.tab.dart';
+import 'package:mdi_todo/pages/finished_tasks.page.dart';
+import 'package:mdi_todo/pages/task_list.page.dart';
 
 final Localstore db = Localstore.instance;
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _HomePageState extends State<HomePage>
+class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
 
@@ -45,8 +45,8 @@ class _HomePageState extends State<HomePage>
       body: TabBarView(
         controller: tabController,
         children: const [
-          TaskListTab(),
-          FinishedTasksTab(),
+          TaskListPage(),
+          FinishedTasksPage(),
         ],
       ),
     );

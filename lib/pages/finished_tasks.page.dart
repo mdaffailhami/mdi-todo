@@ -7,14 +7,14 @@ import 'package:mdi_todo/models/task.model.dart';
 
 final Localstore db = Localstore.instance;
 
-class FinishedTasksTab extends StatefulWidget {
-  const FinishedTasksTab({Key? key}) : super(key: key);
+class FinishedTasksPage extends StatefulWidget {
+  const FinishedTasksPage({Key? key}) : super(key: key);
 
   @override
-  State<FinishedTasksTab> createState() => _FinishedTasksTabState();
+  State<FinishedTasksPage> createState() => _FinishedTasksPageState();
 }
 
-class _FinishedTasksTabState extends State<FinishedTasksTab> {
+class _FinishedTasksPageState extends State<FinishedTasksPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -43,10 +43,13 @@ class _FinishedTasksTabState extends State<FinishedTasksTab> {
               itemCount: tasks.length,
               itemBuilder: (BuildContext context, int index) {
                 final TaskModel task = TaskModel(
-                    id: tasks[index]['id'], title: tasks[index]['title']);
+                    id: tasks[index]['id'],
+                    title: tasks[index]['title'],
+                    date: tasks[index]['date']);
 
                 return FinishedTaskComponent(
                   title: task.title,
+                  date: task.date,
                   onUnchecked: () async {
                     await Future.delayed(const Duration(milliseconds: 300));
 

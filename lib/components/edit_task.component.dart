@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mdi_todo/models/task.model.dart';
 
 class EditTaskComponent extends StatefulWidget {
@@ -20,6 +21,7 @@ class EditTaskComponent extends StatefulWidget {
 }
 
 class _EditTaskComponentState extends State<EditTaskComponent> {
+  DateTime dateInputValue = DateTime.now();
   TextEditingController titleInputController = TextEditingController();
 
   @override
@@ -30,6 +32,9 @@ class _EditTaskComponentState extends State<EditTaskComponent> {
 
   @override
   Widget build(BuildContext context) {
+    final String formattedDate =
+        DateFormat('MMMM dd, yyyy').format(dateInputValue).toString();
+
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -45,19 +50,54 @@ class _EditTaskComponentState extends State<EditTaskComponent> {
           ),
         ],
       ),
-      content: TextField(
-        controller: titleInputController,
-        autofocus: false,
-        decoration: const InputDecoration(hintText: 'Enter task here..'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: titleInputController,
+            autofocus: false,
+            decoration: const InputDecoration(hintText: 'Enter task here..'),
+          ),
+          const SizedBox(
+            height: 18,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(formattedDate),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final DateTime? date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2025),
+                  );
+
+                  if (date == null) {
+                    // Jika di-cancel
+                    return;
+                  } else {
+                    setState(() {
+                      dateInputValue = date;
+                    });
+                  }
+                },
+                child: const Icon(Icons.date_range),
+              ),
+            ],
+          ),
+        ],
       ),
       actions: [
         TextButton(
           onPressed: () {
             widget.onSaveButtonPressed!(
               TaskModel(
-                id: widget.data.id,
-                title: titleInputController.text,
-              ),
+                  id: widget.data.id,
+                  title: titleInputController.text,
+                  date: dateInputValue.toString()),
             );
           },
           child: const Text('SAVE'),

@@ -1,26 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TaskComponent extends StatelessWidget {
   final String title;
+  final String date;
   final void Function()? onChecked;
   final void Function()? onTap;
 
   const TaskComponent({
     Key? key,
-    this.title = '',
+    required this.title,
+    required this.date,
     this.onChecked,
     this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final String formattedDate =
+        DateFormat('MMMM dd, yyyy').format(DateTime.parse(date)).toString();
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 1),
       child: ListTile(
         leading: CardCheckBox(
           onChecked: onChecked,
         ),
-        title: Text(title),
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        subtitle: Text(
+          formattedDate,
+          style: Theme.of(context).textTheme.subtitle2,
+        ),
         onTap: onTap,
       ),
     );
@@ -43,6 +56,7 @@ class _CardCheckBoxState extends State<CardCheckBox> {
   Widget build(BuildContext context) {
     return Checkbox(
       value: isChecked,
+      shape: const CircleBorder(),
       onChanged: (bool? value) {
         widget.onChecked!();
 

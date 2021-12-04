@@ -10,14 +10,14 @@ import 'package:mdi_todo/models/task.model.dart';
 
 final Localstore db = Localstore.instance;
 
-class TaskListTab extends StatefulWidget {
-  const TaskListTab({Key? key}) : super(key: key);
+class TaskListPage extends StatefulWidget {
+  const TaskListPage({Key? key}) : super(key: key);
 
   @override
-  _TaskListTabState createState() => _TaskListTabState();
+  _TaskListPageState createState() => _TaskListPageState();
 }
 
-class _TaskListTabState extends State<TaskListTab> {
+class _TaskListPageState extends State<TaskListPage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -50,10 +50,13 @@ class _TaskListTabState extends State<TaskListTab> {
                   itemCount: tasks.length,
                   itemBuilder: (BuildContext context, int index) {
                     final TaskModel task = TaskModel(
-                        id: tasks[index]['id'], title: tasks[index]['title']);
+                        id: tasks[index]['id'],
+                        title: tasks[index]['title'],
+                        date: tasks[index]['date']);
 
                     return TaskComponent(
                       title: task.title,
+                      date: task.date,
                       onChecked: () async {
                         await Future.delayed(const Duration(milliseconds: 300));
 
@@ -73,7 +76,10 @@ class _TaskListTabState extends State<TaskListTab> {
                           context: context,
                           builder: (BuildContext context) {
                             return EditTaskComponent(
-                              data: TaskModel(id: task.id, title: task.title),
+                              data: TaskModel(
+                                  id: task.id,
+                                  title: task.title,
+                                  date: task.date),
                               onCancelButtonPressed: () {
                                 Navigator.of(context).pop();
                               },
