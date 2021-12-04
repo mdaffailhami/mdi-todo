@@ -21,12 +21,13 @@ class EditTaskComponent extends StatefulWidget {
 }
 
 class _EditTaskComponentState extends State<EditTaskComponent> {
-  DateTime dateInputValue = DateTime.now();
-  TextEditingController titleInputController = TextEditingController();
+  late DateTime dateInputValue;
+  late TextEditingController titleInputController;
 
   @override
   void initState() {
     super.initState();
+    dateInputValue = DateTime.parse(widget.data.date);
     titleInputController = TextEditingController(text: widget.data.title);
   }
 
@@ -70,7 +71,7 @@ class _EditTaskComponentState extends State<EditTaskComponent> {
                 onPressed: () async {
                   final DateTime? date = await showDatePicker(
                     context: context,
-                    initialDate: DateTime.now(),
+                    initialDate: dateInputValue,
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2025),
                   );
