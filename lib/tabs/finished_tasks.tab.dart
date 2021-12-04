@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localstore/localstore.dart';
 import 'package:mdi_todo/components/finished_task.component.dart';
+import 'package:mdi_todo/localstore_collections/finished_tasks.localstore_collection.dart';
+import 'package:mdi_todo/localstore_collections/tasks.localstore_collection.dart';
 
 final Localstore db = Localstore.instance;
 
@@ -15,7 +17,7 @@ class _FinishedTasksTabState extends State<FinishedTasksTab> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: db.collection('finishedTasks').get(),
+      future: finishedTasksLocalstoreCollection.get(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -47,11 +49,10 @@ class _FinishedTasksTabState extends State<FinishedTasksTab> {
                   onUnchecked: () async {
                     await Future.delayed(const Duration(milliseconds: 300));
 
-                    await db
-                        .collection('tasks')
+                    await tasksLocalstoreCollection
                         .doc(taskId)
                         .set({'id': taskId, 'title': taskTitle});
-                    db.collection('finishedTasks').doc(taskId).delete();
+                    finishedTasksLocalstoreCollection.doc(taskId).delete();
 
                     setState(() {});
                   },

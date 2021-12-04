@@ -4,6 +4,8 @@ import 'package:mdi_todo/components/add_task.component.dart';
 import 'package:mdi_todo/components/delete_task_confirmation.component.dart';
 import 'package:mdi_todo/components/edit_task.component.dart';
 import 'package:mdi_todo/components/task.component.dart';
+import 'package:mdi_todo/localstore_collections/finished_tasks.localstore_collection.dart';
+import 'package:mdi_todo/localstore_collections/tasks.localstore_collection.dart';
 import 'package:mdi_todo/models/task.model.dart';
 
 final Localstore db = Localstore.instance;
@@ -21,7 +23,7 @@ class _TaskListTabState extends State<TaskListTab> {
     return Stack(
       children: [
         FutureBuilder(
-          future: db.collection('tasks').get(),
+          future: tasksLocalstoreCollection.get(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -56,13 +58,12 @@ class _TaskListTabState extends State<TaskListTab> {
                         await Future.delayed(const Duration(milliseconds: 300));
 
                         // Hapus task di collection "finishedTask"
-                        await db
-                            .collection('finishedTasks')
+                        await finishedTasksLocalstoreCollection
                             .doc(task.id)
                             .set({'id': task.id, 'title': task.title});
 
                         // Tambah task di collection "tasks"
-                        db.collection('tasks').doc(task.id).delete();
+                        tasksLocalstoreCollection.doc(task.id).delete();
 
                         // Refresh tasks
                         setState(() {});
@@ -78,7 +79,7 @@ class _TaskListTabState extends State<TaskListTab> {
                               },
                               onSaveButtonPressed: (TaskModel data) {
                                 // Edit task
-                                db.collection('tasks').doc(task.id).set(
+                                tasksLocalstoreCollection.doc(task.id).set(
                                   {
                                     'id': data.id,
                                     'title': data.title,
@@ -103,8 +104,7 @@ class _TaskListTabState extends State<TaskListTab> {
                                       },
                                       onYesButtonPressed: () {
                                         // Delete task
-                                        db
-                                            .collection('tasks')
+                                        tasksLocalstoreCollection
                                             .doc(task.id)
                                             .delete();
 
@@ -147,7 +147,7 @@ class _TaskListTabState extends State<TaskListTab> {
                         Navigator.of(context).pop();
                       },
                       onAddButtonPressed: (TaskModel data) async {
-                        await db.collection('tasks').doc(data.id).set(
+                        await tasksLocalstoreCollection.doc(data.id).set(
                           {'id': data.id, 'title': data.title},
                         );
 
