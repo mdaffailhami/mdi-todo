@@ -47,7 +47,7 @@ class _EditTaskComponentState extends State<EditTaskComponent> {
       ),
       content: TextField(
         controller: titleInputController,
-        autofocus: true,
+        autofocus: false,
         decoration: const InputDecoration(hintText: 'Enter task here..'),
       ),
       actions: [
