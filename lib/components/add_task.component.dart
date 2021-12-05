@@ -6,7 +6,7 @@ class AddTaskComponent extends StatefulWidget {
   final void Function()? onCancelButtonPressed;
   final void Function(TaskModel data)? onAddButtonPressed;
 
-  AddTaskComponent({
+  const AddTaskComponent({
     Key? key,
     this.onCancelButtonPressed,
     this.onAddButtonPressed,
