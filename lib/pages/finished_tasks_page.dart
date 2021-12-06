@@ -8,9 +8,26 @@ class FinishedTasksPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        FinishedTaskCardComponent(),
-        FinishedTaskCardComponent(),
-        FinishedTaskCardComponent(),
+        FinishedTaskCardComponent(
+          id: '184691264124',
+          title: 'Bapak kau solo lord pake Estes',
+          date: DateTime.now().toString(),
+        ),
+        FinishedTaskCardComponent(
+          id: '184691264124',
+          title: 'Bapak kau solo lord pake Estes',
+          date: DateTime.now().toString(),
+        ),
+        FinishedTaskCardComponent(
+          id: '184691264124',
+          title: 'Bapak kau solo lord pake Estes',
+          date: DateTime.now().toString(),
+        ),
+        FinishedTaskCardComponent(
+          id: '184691264124',
+          title: 'Bapak kau solo lord pake Estes',
+          date: DateTime.now().toString(),
+        ),
       ],
     );
   }

@@ -11,17 +11,27 @@ class TaskListPage extends StatelessWidget {
       children: [
         ListView(
           children: [
-            TaskCardComponent(),
-            TaskCardComponent(),
-            TaskCardComponent(),
-            TaskCardComponent(),
-            TaskCardComponent(),
+            TaskCardComponent(
+              id: '138419561801',
+              title: 'Mana saia tau saia kan ikan',
+              date: DateTime.now().toString(),
+            ),
+            TaskCardComponent(
+              id: '138419561801',
+              title: 'Mana saia tau saia kan ikan',
+              date: DateTime.now().toString(),
+            ),
+            TaskCardComponent(
+              id: '138419561801',
+              title: 'Mana saia tau saia kan ikan',
+              date: DateTime.now().toString(),
+            ),
           ],
         ),
-        Align(
+        const Align(
           alignment: Alignment.bottomRight,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             child: AddTaskButtonComponent(),
           ),
         )

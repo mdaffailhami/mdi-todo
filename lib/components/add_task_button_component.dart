@@ -11,7 +11,7 @@ class AddTaskButtonComponent extends StatelessWidget {
         showDialog(
           context: context,
           builder: (_) {
-            return AddTaskFormComponent();
+            return const AddTaskFormComponent();
           },
         );
       },

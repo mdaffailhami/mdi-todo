@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mdi_todo/components/delete_task_confirmation_component.dart';
 
-class AddTaskFormComponent extends StatefulWidget {
-  const AddTaskFormComponent({Key? key}) : super(key: key);
+class EditTaskFormComponent extends StatefulWidget {
+  final String id;
+  final String title;
+  final String date;
+
+  const EditTaskFormComponent({
+    Key? key,
+    required this.id,
+    required this.title,
+    required this.date,
+  }) : super(key: key);
 
   @override
-  State<AddTaskFormComponent> createState() => _AddTaskFormComponentState();
+  State<EditTaskFormComponent> createState() => _EditTaskFormComponentState();
 }
 
-class _AddTaskFormComponentState extends State<AddTaskFormComponent> {
+class _EditTaskFormComponentState extends State<EditTaskFormComponent> {
   String titleInputValue = '';
   String dateInputValue = DateTime.now().toString();
+
+  @override
+  void initState() {
+    super.initState();
+    titleInputValue = widget.title;
+    dateInputValue = widget.date;
+  }
 
   void onSetDateButtonPressed() async {
     final DateTime? pickedDate = await showDatePicker(
@@ -27,15 +44,34 @@ class _AddTaskFormComponentState extends State<AddTaskFormComponent> {
     }
   }
 
+  void onDeleteTaskButtonPressed() {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return const DeleteTaskConfirmationComponent();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add new task'),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Your task'),
+          IconButton(
+            onPressed: onDeleteTaskButtonPressed,
+            icon: const Icon(Icons.delete, color: Colors.red),
+          )
+        ],
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
-            autofocus: true,
+            initialValue: titleInputValue,
+            autofocus: false,
             decoration: const InputDecoration(hintText: 'Enter task here..'),
             onChanged: (String value) {
               titleInputValue = value;
@@ -59,7 +95,7 @@ class _AddTaskFormComponentState extends State<AddTaskFormComponent> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('ADD'),
+          child: const Text('SAVE'),
         ),
         TextButton(
           onPressed: () {
