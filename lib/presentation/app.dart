@@ -5,6 +5,11 @@ import 'package:mdi_todo/business_logic/cubits/theme_mode_cubit.dart';
 import 'package:mdi_todo/data/repositories/task_repository.dart';
 import 'package:mdi_todo/data/repositories/theme_mode_repository.dart';
 
+import 'components/app_bar.dart';
+import 'components/task_form_dialog.dart';
+import 'tabs/active_task_list_tab.dart';
+import 'tabs/completed_task_list_tab.dart';
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -61,11 +66,12 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               themeMode: state.themeMode,
               theme: ThemeData(
                 useMaterial3: true,
+                brightness: Brightness.light,
                 colorSchemeSeed: const Color(0xFF00579E),
               ),
               darkTheme: ThemeData(
-                brightness: Brightness.dark,
                 useMaterial3: true,
+                brightness: Brightness.dark,
                 colorSchemeSeed: const Color(0xFF00579E),
               ),
               home: ValueListenableBuilder(
@@ -98,8 +104,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                   body: TabBarView(
                     controller: tabController,
                     children: const [
-                      MyActiveTaskListPage(),
-                      MyCompletedTaskListPage(),
+                      MyActiveTaskListTab(),
+                      MyCompletedTaskListTab(),
                     ],
                   ),
                 ),
