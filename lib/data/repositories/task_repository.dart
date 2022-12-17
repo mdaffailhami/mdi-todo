@@ -24,13 +24,23 @@ class TaskRepository {
   Future<void> markTaskAsActive(Task task) async {
     if (await getTaskById(task.id) == null) throw Exception('Task not found!');
 
-    _tasksCollection.doc(task.id).set(task.copyWith(completed: false).toMap());
+    _tasksCollection.doc(task.id).set(task
+        .copyWith(
+          completed: false,
+          completionDateTime: () => null,
+        )
+        .toMap());
   }
 
   Future<void> markTaskAsCompleted(Task task) async {
     if (await getTaskById(task.id) == null) throw Exception('Task not found!');
 
-    _tasksCollection.doc(task.id).set(task.copyWith(completed: true).toMap());
+    _tasksCollection.doc(task.id).set(task
+        .copyWith(
+          completed: true,
+          completionDateTime: () => DateTime.now(),
+        )
+        .toMap());
   }
 
   Future<Task?> getTaskById(String id) async {
