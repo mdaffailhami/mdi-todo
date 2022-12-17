@@ -35,84 +35,64 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
+    return MultiBlocProvider(
       providers: [
-        RepositoryProvider(
-          create: (context) => ThemeModeRepository(),
-        ),
-        RepositoryProvider(
-          create: (context) => TaskRepository(),
-        ),
+        BlocProvider(create: (context) => ThemeModeCubit()),
+        BlocProvider(create: (context) => TasksCubit()),
       ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => ThemeModeCubit(
-              themeModeRepository:
-                  RepositoryProvider.of<ThemeModeRepository>(context),
+      child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'MDI Todo',
+            themeMode: state.themeMode,
+            theme: ThemeData(
+              useMaterial3: true,
+              brightness: Brightness.light,
+              colorSchemeSeed: const Color(0xFF00579E),
             ),
-          ),
-          BlocProvider(
-            create: (context) => TasksCubit(
-              taskRepository: RepositoryProvider.of<TaskRepository>(context),
+            darkTheme: ThemeData(
+              useMaterial3: true,
+              brightness: Brightness.dark,
+              colorSchemeSeed: const Color(0xFF00579E),
             ),
-          ),
-        ],
-        child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
-          builder: (context, state) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'MDI Todo',
-              themeMode: state.themeMode,
-              theme: ThemeData(
-                useMaterial3: true,
-                brightness: Brightness.light,
-                colorSchemeSeed: const Color(0xFF00579E),
-              ),
-              darkTheme: ThemeData(
-                useMaterial3: true,
-                brightness: Brightness.dark,
-                colorSchemeSeed: const Color(0xFF00579E),
-              ),
-              home: ValueListenableBuilder(
-                valueListenable: currentTabIndex,
-                builder: (context, value, child) {
-                  return Scaffold(
-                    floatingActionButton: value == 0
-                        ? FloatingActionButton(
-                            onPressed: () => showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  const MyTaskFormDialog.add(),
-                            ),
-                            tooltip: 'Add task',
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            child: Icon(
-                              Icons.add,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                          )
-                        : null,
-                    body: child,
-                  );
+            home: ValueListenableBuilder(
+              valueListenable: currentTabIndex,
+              builder: (context, value, child) {
+                return Scaffold(
+                  floatingActionButton: value == 0
+                      ? FloatingActionButton(
+                          onPressed: () => showDialog(
+                            context: context,
+                            builder: (context) => const MyTaskFormDialog.add(),
+                          ),
+                          tooltip: 'Add task',
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          child: Icon(
+                            Icons.add,
+                            color: Theme.of(context).colorScheme.onPrimary,
+                          ),
+                        )
+                      : null,
+                  body: child,
+                );
+              },
+              child: NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return [MyAppBar(tabController: tabController)];
                 },
-                child: NestedScrollView(
-                  headerSliverBuilder: (context, innerBoxIsScrolled) {
-                    return [MyAppBar(tabController: tabController)];
-                  },
-                  body: TabBarView(
-                    controller: tabController,
-                    children: const [
-                      MyActiveTaskListTab(),
-                      MyCompletedTaskListTab(),
-                    ],
-                  ),
+                body: TabBarView(
+                  controller: tabController,
+                  children: const [
+                    MyActiveTaskListTab(),
+                    MyCompletedTaskListTab(),
+                  ],
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

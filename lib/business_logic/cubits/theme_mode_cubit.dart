@@ -5,12 +5,9 @@ import 'package:mdi_todo/data/repositories/theme_mode_repository.dart';
 part 'theme_mode_state.dart';
 
 class ThemeModeCubit extends Cubit<ThemeModeState> {
-  final ThemeModeRepository _themeModeRepository;
+  final _themeModeRepository = ThemeModeRepository();
 
-  ThemeModeCubit({
-    required ThemeModeRepository themeModeRepository,
-  })  : _themeModeRepository = themeModeRepository,
-        super(ThemeModeState(ThemeMode.system)) {
+  ThemeModeCubit() : super(ThemeModeState(ThemeMode.system)) {
     _loadThemeMode();
   }
 

@@ -7,11 +7,9 @@ import 'package:mdi_todo/data/repositories/task_repository.dart';
 part 'tasks_state.dart';
 
 class TasksCubit extends Cubit<TasksState> {
-  final TaskRepository _taskRepository;
+  final _taskRepository = TaskRepository();
 
-  TasksCubit({required TaskRepository taskRepository})
-      : _taskRepository = taskRepository,
-        super(TasksLoadInProgress()) {
+  TasksCubit() : super(TasksLoadInProgress()) {
     _loadTask();
   }
 
