@@ -28,8 +28,8 @@ class TasksLoadSuccess extends TasksState {
 
   List<Task> get sortedCompletedTasks => List.from(completedTasks)
     ..sort(
-      (a, b) => a.deadline.millisecondsSinceEpoch.compareTo(
-        b.deadline.millisecondsSinceEpoch,
+      (a, b) => b.completionDateTime!.millisecondsSinceEpoch.compareTo(
+        a.completionDateTime!.millisecondsSinceEpoch,
       ),
     );
 
