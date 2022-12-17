@@ -84,13 +84,15 @@ class TasksCubit extends Cubit<TasksState> {
     try {
       await _taskRepository.markTaskAsCompleted(task);
 
+      final edittedTask = await _taskRepository.getTaskById(task.id);
+
       final index = (state as TasksLoadSuccess)
           .tasks
           .indexWhere((element) => element.id == task.id);
 
       emit(
         TasksLoadSuccess((state as TasksLoadSuccess).tasks
-          ..replaceRange(index, index + 1, [task.copyWith(completed: true)])),
+          ..replaceRange(index, index + 1, [edittedTask!])),
       );
     } on Exception catch (e) {
       log(e.toString());
@@ -110,7 +112,12 @@ class TasksCubit extends Cubit<TasksState> {
 
       emit(
         TasksLoadSuccess((state as TasksLoadSuccess).tasks
-          ..replaceRange(index, index + 1, [task.copyWith(completed: false)])),
+          ..replaceRange(index, index + 1, [
+            task.copyWith(
+              completed: false,
+              completionDateTime: () => null,
+            )
+          ])),
       );
     } on Exception catch (e) {
       log(e.toString());
