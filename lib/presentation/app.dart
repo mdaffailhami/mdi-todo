@@ -1,111 +1,113 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mdi_todo/business_logic/cubits/tasks_cubit.dart';
+import 'package:mdi_todo/business_logic/cubits/theme_mode_cubit.dart';
+import 'package:mdi_todo/data/repositories/task_repository.dart';
+import 'package:mdi_todo/data/repositories/theme_mode_repository.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
+  late TabController tabController;
+  final currentTabIndex = ValueNotifier(0);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  void initState() {
+    super.initState();
+    tabController = TabController(vsync: this, length: 2);
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+    tabController.addListener(() {
+      if (!tabController.indexIsChanging) return;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      currentTabIndex.value = tabController.index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          create: (context) => ThemeModeRepository(),
+        ),
+        RepositoryProvider(
+          create: (context) => TaskRepository(),
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => ThemeModeCubit(
+              themeModeRepository:
+                  RepositoryProvider.of<ThemeModeRepository>(context),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+          ),
+          BlocProvider(
+            create: (context) => TasksCubit(
+              taskRepository: RepositoryProvider.of<TaskRepository>(context),
             ),
-          ],
+          ),
+        ],
+        child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
+          builder: (context, state) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'MDI Todo',
+              themeMode: state.themeMode,
+              theme: ThemeData(
+                useMaterial3: true,
+                colorSchemeSeed: const Color(0xFF00579E),
+              ),
+              darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                useMaterial3: true,
+                colorSchemeSeed: const Color(0xFF00579E),
+              ),
+              home: ValueListenableBuilder(
+                valueListenable: currentTabIndex,
+                builder: (context, value, child) {
+                  return Scaffold(
+                    floatingActionButton: value == 0
+                        ? FloatingActionButton(
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  const MyTaskFormDialog.add(),
+                            ),
+                            tooltip: 'Add task',
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            child: Icon(
+                              Icons.add,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          )
+                        : null,
+                    body: child,
+                  );
+                },
+                child: NestedScrollView(
+                  headerSliverBuilder: (context, innerBoxIsScrolled) {
+                    return [MyAppBar(tabController: tabController)];
+                  },
+                  body: TabBarView(
+                    controller: tabController,
+                    children: const [
+                      MyActiveTaskListPage(),
+                      MyCompletedTaskListPage(),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
