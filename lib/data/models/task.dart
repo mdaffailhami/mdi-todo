@@ -8,12 +8,14 @@ class Task {
   final bool completed;
   final String name;
   final DateTime deadline;
+  final DateTime? completionDateTime;
 
   Task({
     String? id,
     this.completed = false,
     required this.name,
     required this.deadline,
+    this.completionDateTime,
   }) : id = id ?? generateUid();
 
   Task copyWith({
@@ -21,12 +23,16 @@ class Task {
     bool? completed,
     String? name,
     DateTime? deadline,
+    DateTime? Function()? completionDateTime,
   }) {
     return Task(
       id: id ?? this.id,
       completed: completed ?? this.completed,
       name: name ?? this.name,
       deadline: deadline ?? this.deadline,
+      completionDateTime: completionDateTime == null
+          ? this.completionDateTime
+          : completionDateTime(),
     );
   }
 
@@ -36,6 +42,7 @@ class Task {
       'completed': completed,
       'name': name,
       'deadline': deadline.millisecondsSinceEpoch,
+      'completionDateTime': completionDateTime?.millisecondsSinceEpoch,
     };
   }
 
@@ -45,6 +52,10 @@ class Task {
       completed: map['completed'] as bool,
       name: map['name'] as String,
       deadline: DateTime.fromMillisecondsSinceEpoch(map['deadline'] as int),
+      completionDateTime: map['completionDateTime'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              map['completionDateTime'] as int)
+          : null,
     );
   }
 
@@ -55,7 +66,7 @@ class Task {
 
   @override
   String toString() {
-    return 'Task(id: $id, completed: $completed, name: $name, deadline: $deadline)';
+    return 'Task(id: $id, completed: $completed, name: $name, deadline: $deadline, completionDateTime: $completionDateTime)';
   }
 
   @override
@@ -65,11 +76,16 @@ class Task {
     return other.id == id &&
         other.completed == completed &&
         other.name == name &&
-        other.deadline == deadline;
+        other.deadline == deadline &&
+        other.completionDateTime == completionDateTime;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ completed.hashCode ^ name.hashCode ^ deadline.hashCode;
+    return id.hashCode ^
+        completed.hashCode ^
+        name.hashCode ^
+        deadline.hashCode ^
+        completionDateTime.hashCode;
   }
 }
