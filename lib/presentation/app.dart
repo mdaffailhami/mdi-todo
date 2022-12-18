@@ -4,6 +4,7 @@ import 'package:mdi_todo/business_logic/cubits/tasks_cubit.dart';
 import 'package:mdi_todo/business_logic/cubits/theme_mode_cubit.dart';
 
 import 'screens/home_screen.dart';
+import 'screens/splash_screen.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -36,7 +37,10 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               brightness: Brightness.dark,
               colorSchemeSeed: const Color(0xFF00579E),
             ),
-            home: const MyHomeScreen(),
+            home: const MySplashScreen(
+              duration: Duration(seconds: 2),
+              home: MyHomeScreen(),
+            ),
           );
         },
       ),
