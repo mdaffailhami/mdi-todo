@@ -38,6 +38,7 @@ class MyActiveTaskListTab extends StatelessWidget {
           }
 
           return ListView(
+            padding: EdgeInsets.zero,
             children: state.sortedActiveTasks
                 .map(
                   (task) => MyTaskCard(

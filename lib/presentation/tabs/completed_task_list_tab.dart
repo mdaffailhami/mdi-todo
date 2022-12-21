@@ -38,6 +38,7 @@ class MyCompletedTaskListTab extends StatelessWidget {
           }
 
           return ListView(
+            padding: EdgeInsets.zero,
             children: state.sortedCompletedTasks
                 .map(
                   (task) => MyTaskCard(
