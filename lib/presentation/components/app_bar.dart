@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/business_logic/cubits/theme_mode_cubit.dart';
 
@@ -13,6 +14,13 @@ class MyAppBar extends StatelessWidget {
       floating: true,
       centerTitle: true,
       surfaceTintColor: Theme.of(context).colorScheme.background,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Theme.of(context).colorScheme.background,
+        statusBarIconBrightness:
+            Theme.of(context).brightness == Brightness.light
+                ? Brightness.dark
+                : Brightness.light,
+      ),
       actions: [
         BlocBuilder<ThemeModeCubit, ThemeModeState>(
           builder: (context, state) {
