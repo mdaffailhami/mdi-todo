@@ -73,6 +73,7 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
     final type = widget.type;
 
     return AlertDialog(
+      titlePadding: const EdgeInsets.fromLTRB(24, 24, 14, 0),
       title: () {
         if (type == TaskFormDialogType.add) {
           return Text(
@@ -230,7 +231,7 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
               },
               style: TextButton.styleFrom(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 17, horizontal: 13),
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 backgroundColor:
                     Theme.of(context).colorScheme.secondaryContainer,
                 foregroundColor:
