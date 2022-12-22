@@ -23,8 +23,6 @@ class _MyHomeScreenState extends State<MyHomeScreen>
     tabController = TabController(vsync: this, length: 2);
 
     tabController.addListener(() {
-      if (!tabController.indexIsChanging) return;
-
       currentTabIndex.value = tabController.index;
     });
   }
