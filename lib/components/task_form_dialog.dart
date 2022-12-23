@@ -80,6 +80,19 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
     BlocProvider.of<EditTaskBloc>(context).editTask(newTask);
   }
 
+  void showSnackBar(String label) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(label),
+        action: SnackBarAction(
+          label: 'DISMISS',
+          onPressed: () {},
+          textColor: Theme.of(context).colorScheme.secondaryContainer,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final type = widget.type;
@@ -88,17 +101,26 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
       listeners: [
         BlocListener<AddTaskBloc, AddTaskState>(
           listener: (context, state) {
-            Navigator.popUntil(context, (route) => route.isFirst);
+            if (state is AddTaskSuccess) {
+              showSnackBar('Task added.');
+              Navigator.popUntil(context, (route) => route.isFirst);
+            }
           },
         ),
         BlocListener<DeleteTaskBloc, DeleteTaskState>(
           listener: (context, state) {
-            Navigator.popUntil(context, (route) => route.isFirst);
+            if (state is DeleteTaskSuccess) {
+              showSnackBar('Task deleted.');
+              Navigator.popUntil(context, (route) => route.isFirst);
+            }
           },
         ),
         BlocListener<EditTaskBloc, EditTaskState>(
           listener: (context, state) {
-            Navigator.popUntil(context, (route) => route.isFirst);
+            if (state is EditTaskSuccess) {
+              showSnackBar('Task edited.');
+              Navigator.popUntil(context, (route) => route.isFirst);
+            }
           },
         ),
       ],
