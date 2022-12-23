@@ -21,28 +21,6 @@ class TaskRepository {
     _tasksCollection.doc(task.id).set(task.toMap());
   }
 
-  Future<void> markTaskAsActive(Task task) async {
-    if (await getTaskById(task.id) == null) throw Exception('Task not found!');
-
-    _tasksCollection.doc(task.id).set(task
-        .copyWith(
-          completed: false,
-          completionDateTime: () => null,
-        )
-        .toMap());
-  }
-
-  Future<void> markTaskAsCompleted(Task task) async {
-    if (await getTaskById(task.id) == null) throw Exception('Task not found!');
-
-    _tasksCollection.doc(task.id).set(task
-        .copyWith(
-          completed: true,
-          completionDateTime: () => DateTime.now(),
-        )
-        .toMap());
-  }
-
   Future<Task?> getTaskById(String id) async {
     final doc = await _tasksCollection.doc(id).get();
 
@@ -53,6 +31,7 @@ class TaskRepository {
 
   Future<List<Task>> getAllTasks() async {
     final docs = await _tasksCollection.get();
+    await Future.delayed(const Duration(seconds: 1));
 
     if (docs == null) return [];
 

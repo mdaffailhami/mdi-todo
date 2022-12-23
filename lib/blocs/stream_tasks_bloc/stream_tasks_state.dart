@@ -1,16 +1,14 @@
-part of 'tasks_cubit.dart';
+part of 'stream_tasks_bloc.dart';
 
-abstract class TasksState {}
+abstract class StreamTasksState {}
 
-class TasksLoadInProgress extends TasksState {}
+class StreamTasksInitial extends StreamTasksState {}
 
-class TasksLoadFailure extends TasksState {
-  final Exception exception;
+class StreamTasksInProgress extends StreamTasksState {}
 
-  TasksLoadFailure(this.exception);
-}
+class StreamTasksFailure extends StreamTasksState {}
 
-class TasksLoadSuccess extends TasksState {
+class StreamTasksSuccess extends StreamTasksState {
   final List<Task> tasks;
 
   List<Task> get activeTasks =>
@@ -33,5 +31,5 @@ class TasksLoadSuccess extends TasksState {
       ),
     );
 
-  TasksLoadSuccess(this.tasks);
+  StreamTasksSuccess(this.tasks);
 }

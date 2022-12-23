@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mdi_todo/blocs/stream_tasks_bloc/stream_tasks_bloc.dart';
 
 import '../components/app_bar.dart';
 import '../components/task_form_dialog.dart';
@@ -20,6 +22,9 @@ class _MyHomeScreenState extends State<MyHomeScreen>
   @override
   void initState() {
     super.initState();
+
+    BlocProvider.of<StreamTasksBloc>(context).streamTasks();
+
     tabController = TabController(vsync: this, length: 2);
 
     tabController.addListener(() {
@@ -51,6 +56,7 @@ class _MyHomeScreenState extends State<MyHomeScreen>
         );
       },
       child: NestedScrollView(
+        floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [MyAppBar(tabController: tabController)];
         },
