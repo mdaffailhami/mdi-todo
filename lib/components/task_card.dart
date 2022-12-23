@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/business_logic/cubits/tasks_cubit.dart';
-import 'package:mdi_todo/data/models/task.dart';
+import 'package:mdi_todo/blocs/edit_task_bloc/edit_task_bloc.dart';
+import 'package:mdi_todo/models/task.dart';
 import 'package:mdi_todo/utils/format_date.dart';
 
 class MyTaskCard extends StatefulWidget {
@@ -41,7 +41,7 @@ class _MyTaskCardState extends State<MyTaskCard> {
       ),
       subtitle: Text(formatDate(widget.task.deadline)),
       trailing: Tooltip(
-        message: checked ? 'Turn it back to Active Tasks' : 'Set as completed',
+        message: checked ? 'Mark as active' : 'Mark as completed',
         child: Checkbox(
           value: checked,
           checkColor: Theme.of(context).colorScheme.background,
@@ -50,12 +50,18 @@ class _MyTaskCardState extends State<MyTaskCard> {
 
             setState(() => checked = !checked);
             Future.delayed(const Duration(milliseconds: 300)).then((_) {
+              final newTask = Task.from(widget.task);
+
               if (value == true) {
-                BlocProvider.of<TasksCubit>(context)
-                    .markTaskAsCompleted(widget.task);
+                newTask.completed = true;
+                newTask.completionDateTime = DateTime.now();
+
+                BlocProvider.of<EditTaskBloc>(context).editTask(newTask);
               } else if (value == false) {
-                BlocProvider.of<TasksCubit>(context)
-                    .markTaskAsActive(widget.task);
+                newTask.completed = false;
+                newTask.completionDateTime = null;
+
+                BlocProvider.of<EditTaskBloc>(context).editTask(newTask);
               }
               checked = !checked;
             });
