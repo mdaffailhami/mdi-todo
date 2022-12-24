@@ -57,14 +57,10 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
   Future<void> addTaskButtonPressed() async {
     if (formKey.currentState!.validate() == false) return;
 
-    final task = Task(
-      id: generateUid(),
-      completed: false,
+    BlocProvider.of<AddTaskBloc>(context).addTask(
       name: name,
       deadline: deadline,
     );
-
-    BlocProvider.of<AddTaskBloc>(context).addTask(task);
   }
 
   Future<void> deleteTaskButtonPressed() async {

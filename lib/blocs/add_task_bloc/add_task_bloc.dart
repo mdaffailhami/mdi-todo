@@ -1,12 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/models/task.dart';
 import 'package:mdi_todo/repositories/task_repository.dart';
+import 'package:mdi_todo/utils/generate_uid.dart';
 
 part 'add_task_event.dart';
 part 'add_task_state.dart';
 
 class AddTaskBloc extends Bloc<_AddTaskEvent, AddTaskState> {
-  void addTask(Task task) => add(_AddTaskRequested(task));
+  void addTask({required String name, required DateTime deadline}) {
+    add(_AddTaskRequested(name: name, deadline: deadline));
+  }
 
   AddTaskBloc({required TaskRepository taskRepository})
       : super(AddTaskInitial()) {
@@ -14,9 +17,16 @@ class AddTaskBloc extends Bloc<_AddTaskEvent, AddTaskState> {
       emit(AddTaskInProgress());
 
       try {
-        await taskRepository.addTask(event.task);
+        final task = Task(
+          id: generateUid(),
+          name: event.name,
+          deadline: event.deadline,
+          completed: false,
+        );
 
-        emit(AddTaskSuccess(event.task));
+        await taskRepository.addTask(task);
+
+        emit(AddTaskSuccess(task));
       } catch (e) {
         emit(AddTaskFailure());
       }
