@@ -105,7 +105,6 @@ class StreamTasksBloc extends Bloc<_StreamTasksEvent, StreamTasksState> {
 
     on<_TaskEdited>((event, emit) {
       if (state is StreamTasksSuccess) {
-        print('asd');
         final index = (state as StreamTasksSuccess)
             .tasks
             .indexWhere((element) => element.id == event.editedTask.id);
