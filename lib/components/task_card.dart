@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/blocs/edit_task_bloc/edit_task_bloc.dart';
 import 'package:mdi_todo/blocs/mark_task_as_active_bloc/mark_task_as_active_bloc.dart';
 import 'package:mdi_todo/blocs/mark_task_as_completed_bloc/mark_task_as_completed_bloc.dart';
 import 'package:mdi_todo/models/task.dart';
