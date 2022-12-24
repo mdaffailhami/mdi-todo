@@ -1,16 +1,6 @@
-# mdi_todo
+# MDI Todo
 
-A new Flutter project.
+MDI Todo helps you stay organized and on top of your tasks. With MDI Todo, you can create a list of tasks, set deadlines, and mark tasks as completed when you're done. Try it out and see how it can help you stay on track and get things done!
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Download MDI Todo for android here:
+https://github.com/mdaffailhami/mdi-todo/releases/tag/v1.0.0
