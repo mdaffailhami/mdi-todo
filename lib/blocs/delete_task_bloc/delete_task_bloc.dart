@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/models/task.dart';
 import 'package:mdi_todo/repositories/task_repository.dart';
@@ -14,10 +16,15 @@ class DeleteTaskBloc extends Bloc<_DeleteTaskEvent, DeleteTaskState> {
       emit(DeleteTaskInProgress());
 
       try {
-        await taskRepository.deleteTask(event.task);
+        if (await taskRepository.getTaskById(event.task.id) != event.task) {
+          throw Exception('Task not found.');
+        }
+
+        await taskRepository.deleteTaskById(event.task.id);
 
         emit(DeleteTaskSuccess(event.task));
       } catch (e) {
+        log(e.toString());
         emit(DeleteTaskFailure());
       }
     });

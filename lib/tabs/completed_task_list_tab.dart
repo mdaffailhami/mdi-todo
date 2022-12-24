@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/blocs/mark_task_as_active_bloc/mark_task_as_active_bloc.dart';
 import 'package:mdi_todo/blocs/stream_tasks_bloc/stream_tasks_bloc.dart';
+import 'package:mdi_todo/components/task_card.dart';
+import 'package:mdi_todo/components/task_form_dialog.dart';
 import 'package:mdi_todo/utils/show_snack_bar.dart';
-
-import '../components/task_card.dart';
-import '../components/task_form_dialog.dart';
 
 class MyCompletedTaskListTab extends StatelessWidget {
   const MyCompletedTaskListTab({super.key});

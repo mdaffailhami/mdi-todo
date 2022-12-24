@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/blocs/stream_tasks_bloc/stream_tasks_bloc.dart';
-
-import '../components/app_bar.dart';
-import '../components/task_form_dialog.dart';
-import '../tabs/active_task_list_tab.dart';
-import '../tabs/completed_task_list_tab.dart';
+import 'package:mdi_todo/components/app_bar.dart';
+import 'package:mdi_todo/components/task_form_dialog.dart';
+import 'package:mdi_todo/tabs/active_task_list_tab.dart';
+import 'package:mdi_todo/tabs/completed_task_list_tab.dart';
 
 class MyHomeScreen extends StatefulWidget {
   const MyHomeScreen({super.key});

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/models/task.dart';
 import 'package:mdi_todo/repositories/task_repository.dart';
@@ -15,14 +17,19 @@ class MarkTaskAsActiveBloc
       emit(MarkTaskAsActiveInProgress());
 
       try {
+        if (await taskRepository.getTaskById(event.task.id) != event.task) {
+          throw Exception('Task not found.');
+        }
+
         final newTask = Task.from(event.task);
         newTask.completed = false;
         newTask.completionDateTime = DateTime.now();
 
-        await taskRepository.editTask(newTask);
+        await taskRepository.editTaskById(event.task.id, task: newTask);
 
         emit(MarkTaskAsActiveSuccess(newTask));
       } catch (e) {
+        log(e.toString());
         emit(MarkTaskAsActiveFailure());
       }
     });

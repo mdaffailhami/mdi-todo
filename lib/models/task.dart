@@ -27,11 +27,10 @@ class Task {
     return Task(
       id: map['id'] as String,
       name: map['name'] as String,
-      deadline: DateTime.fromMillisecondsSinceEpoch(map['deadline'] as int),
+      deadline: DateTime.parse(map['deadline'] as String),
       completed: map['completed'] as bool,
       completionDateTime: map['completionDateTime'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-              map['completionDateTime'] as int)
+          ? DateTime.parse(map['completionDateTime'] as String)
           : null,
     );
   }
@@ -40,9 +39,9 @@ class Task {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      'deadline': deadline.millisecondsSinceEpoch,
+      'deadline': deadline.toString(),
       'completed': completed,
-      'completionDateTime': completionDateTime?.millisecondsSinceEpoch,
+      'completionDateTime': completionDateTime?.toString(),
     };
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/repositories/theme_mode_repository.dart';
@@ -21,6 +23,7 @@ class ChangeThemeModeBloc
 
         emit(ChangeThemeModeSuccess(event.themeMode));
       } catch (e) {
+        log(e.toString());
         emit(ChangeThemeModeFailure());
       }
     });

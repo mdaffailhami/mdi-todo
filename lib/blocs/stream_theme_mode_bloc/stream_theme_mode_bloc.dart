@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +41,7 @@ class StreamThemeModeBloc
 
         emit(StreamThemeModeSuccess(themeMode ?? ThemeMode.system));
       } catch (e) {
+        log(e.toString());
         emit(StreamThemeModeFailure());
       }
     });

@@ -1,6 +1,5 @@
 import 'package:localstore/localstore.dart';
-
-import '../models/task.dart';
+import 'package:mdi_todo/models/task.dart';
 
 class TaskRepository {
   final _tasksCollection = Localstore.instance.collection('tasks');
@@ -9,16 +8,12 @@ class TaskRepository {
     _tasksCollection.doc(task.id).set(task.toMap());
   }
 
-  Future<void> deleteTask(Task task) async {
-    if (await getTaskById(task.id) == null) throw Exception('Task not found!');
-
-    _tasksCollection.doc(task.id).delete();
+  Future<void> deleteTaskById(String id) async {
+    _tasksCollection.doc(id).delete();
   }
 
-  Future<void> editTask(Task task) async {
-    if (await getTaskById(task.id) == null) throw Exception('Task not found!');
-
-    _tasksCollection.doc(task.id).set(task.toMap());
+  Future<void> editTaskById(String id, {required Task task}) async {
+    _tasksCollection.doc(id).set(task.toMap());
   }
 
   Future<Task?> getTaskById(String id) async {

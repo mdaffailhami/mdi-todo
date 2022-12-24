@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/blocs/add_task_bloc/add_task_bloc.dart';
@@ -81,6 +82,7 @@ class StreamTasksBloc extends Bloc<_StreamTasksEvent, StreamTasksState> {
 
         emit(StreamTasksSuccess(tasks));
       } catch (e) {
+        log(e.toString());
         emit(StreamTasksFailure());
       }
     });
@@ -103,6 +105,7 @@ class StreamTasksBloc extends Bloc<_StreamTasksEvent, StreamTasksState> {
 
     on<_TaskEdited>((event, emit) {
       if (state is StreamTasksSuccess) {
+        print('asd');
         final index = (state as StreamTasksSuccess)
             .tasks
             .indexWhere((element) => element.id == event.editedTask.id);

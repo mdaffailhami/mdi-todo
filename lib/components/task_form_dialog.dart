@@ -3,10 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/blocs/add_task_bloc/add_task_bloc.dart';
 import 'package:mdi_todo/blocs/delete_task_bloc/delete_task_bloc.dart';
 import 'package:mdi_todo/blocs/edit_task_bloc/edit_task_bloc.dart';
-
 import 'package:mdi_todo/models/task.dart';
 import 'package:mdi_todo/utils/format_date.dart';
-import 'package:mdi_todo/utils/generate_uid.dart';
 import 'package:mdi_todo/utils/show_snack_bar.dart';
 
 enum TaskFormDialogType {
@@ -70,11 +68,11 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
   Future<void> editTaskButtonPressed() async {
     if (formKey.currentState!.validate() == false) return;
 
-    final newTask = Task.from(widget.task!);
-    newTask.name = name;
-    newTask.deadline = deadline;
-
-    BlocProvider.of<EditTaskBloc>(context).editTask(newTask);
+    BlocProvider.of<EditTaskBloc>(context).editTask(
+      widget.task!,
+      name: name,
+      deadline: deadline,
+    );
   }
 
   @override
@@ -86,10 +84,7 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
         BlocListener<AddTaskBloc, AddTaskState>(
           listener: (context, state) {
             if (state is AddTaskSuccess) {
-              showSnackBar(
-                context: context,
-                label: 'Task added.',
-              );
+              showSnackBar(context: context, label: 'Task added.');
               Navigator.popUntil(context, (route) => route.isFirst);
             }
           },
@@ -97,10 +92,7 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
         BlocListener<DeleteTaskBloc, DeleteTaskState>(
           listener: (context, state) {
             if (state is DeleteTaskSuccess) {
-              showSnackBar(
-                context: context,
-                label: 'Task deleted.',
-              );
+              showSnackBar(context: context, label: 'Task deleted.');
               Navigator.popUntil(context, (route) => route.isFirst);
             }
           },
@@ -108,10 +100,7 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
         BlocListener<EditTaskBloc, EditTaskState>(
           listener: (context, state) {
             if (state is EditTaskSuccess) {
-              showSnackBar(
-                context: context,
-                label: 'Task edited.',
-              );
+              showSnackBar(context: context, label: 'Task edited.');
               Navigator.popUntil(context, (route) => route.isFirst);
             }
           },

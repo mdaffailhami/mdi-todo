@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/models/task.dart';
 import 'package:mdi_todo/repositories/task_repository.dart';
@@ -28,6 +30,7 @@ class AddTaskBloc extends Bloc<_AddTaskEvent, AddTaskState> {
 
         emit(AddTaskSuccess(task));
       } catch (e) {
+        log(e.toString());
         emit(AddTaskFailure());
       }
     });
