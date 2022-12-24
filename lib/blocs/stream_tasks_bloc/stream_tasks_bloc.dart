@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/blocs/add_task_bloc/add_task_bloc.dart';
 import 'package:mdi_todo/blocs/delete_task_bloc/delete_task_bloc.dart';
 import 'package:mdi_todo/blocs/edit_task_bloc/edit_task_bloc.dart';
+import 'package:mdi_todo/blocs/mark_task_as_active_bloc/mark_task_as_active_bloc.dart';
+import 'package:mdi_todo/blocs/mark_task_as_completed_bloc/mark_task_as_completed_bloc.dart';
 import 'package:mdi_todo/models/task.dart';
 import 'package:mdi_todo/repositories/task_repository.dart';
 
@@ -11,9 +13,12 @@ part 'stream_tasks_event.dart';
 part 'stream_tasks_state.dart';
 
 class StreamTasksBloc extends Bloc<_StreamTasksEvent, StreamTasksState> {
-  late final StreamSubscription<AddTaskState>? _addTaskSubscription;
-  late final StreamSubscription<DeleteTaskState>? _deleteTaskSubscription;
-  late final StreamSubscription<EditTaskState>? _editTaskSubscription;
+  StreamSubscription<AddTaskState>? _addTaskSubscription;
+  StreamSubscription<DeleteTaskState>? _deleteTaskSubscription;
+  StreamSubscription<EditTaskState>? _editTaskSubscription;
+  StreamSubscription<MarkTaskAsCompletedState>?
+      _markTaskAsCompletedSubscription;
+  StreamSubscription<MarkTaskAsActiveState>? _markTaskAsActiveSubscription;
 
   void streamTasks() => add(_StreamTasksRequested());
 
@@ -22,6 +27,8 @@ class StreamTasksBloc extends Bloc<_StreamTasksEvent, StreamTasksState> {
     _addTaskSubscription?.cancel();
     _deleteTaskSubscription?.cancel();
     _editTaskSubscription?.cancel();
+    _markTaskAsCompletedSubscription?.cancel();
+    _markTaskAsActiveSubscription?.cancel();
 
     return super.close();
   }
@@ -30,6 +37,8 @@ class StreamTasksBloc extends Bloc<_StreamTasksEvent, StreamTasksState> {
     required AddTaskBloc addTaskBloc,
     required DeleteTaskBloc deleteTaskBloc,
     required EditTaskBloc editTaskBloc,
+    required MarkTaskAsCompletedBloc markTaskAsCompletedBloc,
+    required MarkTaskAsActiveBloc markTaskAsActiveBloc,
     required TaskRepository taskRepository,
   }) : super(StreamTasksInitial()) {
     on<_StreamTasksRequested>((event, emit) async {
@@ -53,6 +62,20 @@ class StreamTasksBloc extends Bloc<_StreamTasksEvent, StreamTasksState> {
         _editTaskSubscription = editTaskBloc.stream.listen((state) {
           if (state is EditTaskSuccess) {
             add(_TaskEdited(state.editedTask));
+          }
+        });
+
+        _markTaskAsCompletedSubscription =
+            markTaskAsCompletedBloc.stream.listen((state) {
+          if (state is MarkTaskAsCompletedSuccess) {
+            add(_TaskEdited(state.markedAsCompletedTask));
+          }
+        });
+
+        _markTaskAsActiveSubscription =
+            markTaskAsActiveBloc.stream.listen((state) {
+          if (state is MarkTaskAsActiveSuccess) {
+            add(_TaskEdited(state.markedAsActiveTask));
           }
         });
 

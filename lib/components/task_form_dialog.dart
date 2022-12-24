@@ -7,6 +7,7 @@ import 'package:mdi_todo/blocs/edit_task_bloc/edit_task_bloc.dart';
 import 'package:mdi_todo/models/task.dart';
 import 'package:mdi_todo/utils/format_date.dart';
 import 'package:mdi_todo/utils/generate_uid.dart';
+import 'package:mdi_todo/utils/show_snack_bar.dart';
 
 enum TaskFormDialogType {
   add,
@@ -80,19 +81,6 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
     BlocProvider.of<EditTaskBloc>(context).editTask(newTask);
   }
 
-  void showSnackBar(String label) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(label),
-        action: SnackBarAction(
-          label: 'DISMISS',
-          onPressed: () {},
-          textColor: Theme.of(context).colorScheme.secondaryContainer,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final type = widget.type;
@@ -102,7 +90,10 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
         BlocListener<AddTaskBloc, AddTaskState>(
           listener: (context, state) {
             if (state is AddTaskSuccess) {
-              showSnackBar('Task added.');
+              showSnackBar(
+                context: context,
+                label: 'Task added.',
+              );
               Navigator.popUntil(context, (route) => route.isFirst);
             }
           },
@@ -110,7 +101,10 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
         BlocListener<DeleteTaskBloc, DeleteTaskState>(
           listener: (context, state) {
             if (state is DeleteTaskSuccess) {
-              showSnackBar('Task deleted.');
+              showSnackBar(
+                context: context,
+                label: 'Task deleted.',
+              );
               Navigator.popUntil(context, (route) => route.isFirst);
             }
           },
@@ -118,7 +112,10 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
         BlocListener<EditTaskBloc, EditTaskState>(
           listener: (context, state) {
             if (state is EditTaskSuccess) {
-              showSnackBar('Task edited.');
+              showSnackBar(
+                context: context,
+                label: 'Task edited.',
+              );
               Navigator.popUntil(context, (route) => route.isFirst);
             }
           },

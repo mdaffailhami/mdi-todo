@@ -65,4 +65,9 @@ class Task {
         completed.hashCode ^
         completionDateTime.hashCode;
   }
+
+  @override
+  String toString() {
+    return 'Task(id: $id, name: $name, deadline: $deadline, completed: $completed, completionDateTime: $completionDateTime)';
+  }
 }
