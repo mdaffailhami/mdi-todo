@@ -41,30 +41,4 @@ class TaskRepository {
 
     return tasks;
   }
-
-  Future<List<Task>> getAllActiveTasks() async {
-    final docs =
-        await _tasksCollection.where('completed', isEqualTo: false).get();
-
-    if (docs == null) return [];
-
-    List<Task> tasks = [];
-
-    docs.forEach((key, value) => tasks.add(Task.fromMap(value)));
-
-    return tasks;
-  }
-
-  Future<List<Task>> getAllCompletedTasks() async {
-    final docs =
-        await _tasksCollection.where('completed', isEqualTo: true).get();
-
-    if (docs == null) return [];
-
-    List<Task> tasks = [];
-
-    docs.forEach((key, value) => tasks.add(Task.fromMap(value)));
-
-    return tasks;
-  }
 }
