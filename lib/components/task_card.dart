@@ -39,7 +39,7 @@ class _MyTaskCardState extends State<MyTaskCard> {
       ),
       subtitle: Text(formatDate(widget.task.deadline)),
       trailing: Tooltip(
-        message: checked ? 'Mark as active' : 'Mark as completed',
+        message: checked ? 'Mark task as active' : 'Mark task as completed',
         child: Checkbox(
           value: checked,
           checkColor: Theme.of(context).colorScheme.background,
