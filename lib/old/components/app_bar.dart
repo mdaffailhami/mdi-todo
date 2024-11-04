@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/blocs/change_theme_mode_bloc/change_theme_mode_bloc.dart';
-import 'package:mdi_todo/blocs/stream_theme_mode_bloc/stream_theme_mode_bloc.dart';
+import 'package:mdi_todo/old/blocs/change_theme_mode_bloc/change_theme_mode_bloc.dart';
+import 'package:mdi_todo/old/blocs/stream_theme_mode_bloc/stream_theme_mode_bloc.dart';
 
 class MyAppBar extends StatelessWidget {
   final TabController tabController;

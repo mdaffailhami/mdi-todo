@@ -1,5 +1,5 @@
 import 'package:localstore/localstore.dart';
-import 'package:mdi_todo/models/task.dart';
+import 'package:mdi_todo/old/models/task.dart';
 
 class TaskRepository {
   final _tasksCollection = Localstore.instance.collection('tasks');

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/blocs/add_task_bloc/add_task_bloc.dart';
-import 'package:mdi_todo/blocs/delete_task_bloc/delete_task_bloc.dart';
-import 'package:mdi_todo/blocs/edit_task_bloc/edit_task_bloc.dart';
-import 'package:mdi_todo/models/task.dart';
-import 'package:mdi_todo/utils/format_date.dart';
-import 'package:mdi_todo/utils/show_snack_bar.dart';
+import 'package:mdi_todo/old/blocs/add_task_bloc/add_task_bloc.dart';
+import 'package:mdi_todo/old/blocs/delete_task_bloc/delete_task_bloc.dart';
+import 'package:mdi_todo/old/blocs/edit_task_bloc/edit_task_bloc.dart';
+import 'package:mdi_todo/old/models/task.dart';
+import 'package:mdi_todo/old/utils/format_date.dart';
+import 'package:mdi_todo/old/utils/show_snack_bar.dart';
 
 enum TaskFormDialogType {
   add,

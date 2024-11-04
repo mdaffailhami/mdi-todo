@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/blocs/mark_task_as_active_bloc/mark_task_as_active_bloc.dart';
-import 'package:mdi_todo/blocs/mark_task_as_completed_bloc/mark_task_as_completed_bloc.dart';
-import 'package:mdi_todo/models/task.dart';
-import 'package:mdi_todo/utils/format_date.dart';
+import 'package:mdi_todo/old/blocs/mark_task_as_active_bloc/mark_task_as_active_bloc.dart';
+import 'package:mdi_todo/old/blocs/mark_task_as_completed_bloc/mark_task_as_completed_bloc.dart';
+import 'package:mdi_todo/old/models/task.dart';
+import 'package:mdi_todo/old/utils/format_date.dart';
 
 class MyTaskCard extends StatefulWidget {
   final Task task;

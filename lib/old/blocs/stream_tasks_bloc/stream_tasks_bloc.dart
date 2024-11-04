@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/blocs/add_task_bloc/add_task_bloc.dart';
-import 'package:mdi_todo/blocs/delete_task_bloc/delete_task_bloc.dart';
-import 'package:mdi_todo/blocs/edit_task_bloc/edit_task_bloc.dart';
-import 'package:mdi_todo/blocs/mark_task_as_active_bloc/mark_task_as_active_bloc.dart';
-import 'package:mdi_todo/blocs/mark_task_as_completed_bloc/mark_task_as_completed_bloc.dart';
-import 'package:mdi_todo/models/task.dart';
-import 'package:mdi_todo/repositories/task_repository.dart';
+import 'package:mdi_todo/old/blocs/add_task_bloc/add_task_bloc.dart';
+import 'package:mdi_todo/old/blocs/delete_task_bloc/delete_task_bloc.dart';
+import 'package:mdi_todo/old/blocs/edit_task_bloc/edit_task_bloc.dart';
+import 'package:mdi_todo/old/blocs/mark_task_as_active_bloc/mark_task_as_active_bloc.dart';
+import 'package:mdi_todo/old/blocs/mark_task_as_completed_bloc/mark_task_as_completed_bloc.dart';
+import 'package:mdi_todo/old/models/task.dart';
+import 'package:mdi_todo/old/repositories/task_repository.dart';
 
 part 'stream_tasks_event.dart';
 part 'stream_tasks_state.dart';

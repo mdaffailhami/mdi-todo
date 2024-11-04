@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/models/task.dart';
-import 'package:mdi_todo/repositories/task_repository.dart';
-import 'package:mdi_todo/utils/generate_uid.dart';
+import 'package:mdi_todo/old/models/task.dart';
+import 'package:mdi_todo/old/repositories/task_repository.dart';
+import 'package:mdi_todo/old/utils/generate_uid.dart';
 
 part 'add_task_event.dart';
 part 'add_task_state.dart';

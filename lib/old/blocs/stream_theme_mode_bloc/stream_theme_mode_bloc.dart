@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/blocs/change_theme_mode_bloc/change_theme_mode_bloc.dart';
-import 'package:mdi_todo/repositories/theme_mode_repository.dart';
+import 'package:mdi_todo/old/blocs/change_theme_mode_bloc/change_theme_mode_bloc.dart';
+import 'package:mdi_todo/old/repositories/theme_mode_repository.dart';
 
 part 'stream_theme_mode_event.dart';
 part 'stream_theme_mode_state.dart';

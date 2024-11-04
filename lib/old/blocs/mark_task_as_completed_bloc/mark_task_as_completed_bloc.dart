@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/models/task.dart';
-import 'package:mdi_todo/repositories/task_repository.dart';
+import 'package:mdi_todo/old/models/task.dart';
+import 'package:mdi_todo/old/repositories/task_repository.dart';
 
 part 'mark_task_as_completed_event.dart';
 part 'mark_task_as_completed_state.dart';

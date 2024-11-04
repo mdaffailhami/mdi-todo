@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/blocs/mark_task_as_active_bloc/mark_task_as_active_bloc.dart';
-import 'package:mdi_todo/blocs/stream_tasks_bloc/stream_tasks_bloc.dart';
-import 'package:mdi_todo/components/task_card.dart';
-import 'package:mdi_todo/components/task_form_dialog.dart';
-import 'package:mdi_todo/utils/show_snack_bar.dart';
+import 'package:mdi_todo/old/blocs/mark_task_as_completed_bloc/mark_task_as_completed_bloc.dart';
+import 'package:mdi_todo/old/blocs/stream_tasks_bloc/stream_tasks_bloc.dart';
+import 'package:mdi_todo/old/components/task_card.dart';
+import 'package:mdi_todo/old/components/task_form_dialog.dart';
+import 'package:mdi_todo/old/utils/show_snack_bar.dart';
 
-class MyCompletedTaskListTab extends StatelessWidget {
-  const MyCompletedTaskListTab({super.key});
+class MyActiveTaskListTab extends StatelessWidget {
+  const MyActiveTaskListTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +26,10 @@ class MyCompletedTaskListTab extends StatelessWidget {
         }
 
         if (state is StreamTasksSuccess) {
-          if (state.completedTasks.isEmpty) {
+          if (state.activeTasks.isEmpty) {
             return Center(
               child: Text(
-                'No completed tasks',
+                'No active tasks',
                 style: Theme.of(context)
                     .textTheme
                     .displaySmall!
@@ -38,18 +38,19 @@ class MyCompletedTaskListTab extends StatelessWidget {
             );
           }
 
-          return BlocListener<MarkTaskAsActiveBloc, MarkTaskAsActiveState>(
+          return BlocListener<MarkTaskAsCompletedBloc,
+              MarkTaskAsCompletedState>(
             listener: (context, state) {
-              if (state is MarkTaskAsActiveSuccess) {
+              if (state is MarkTaskAsCompletedSuccess) {
                 showSnackBar(
                   context: context,
-                  label: 'Task marked as active.',
+                  label: 'Task marked as completed.',
                 );
               }
             },
             child: ListView(
               padding: EdgeInsets.zero,
-              children: state.sortedCompletedTasks
+              children: state.sortedActiveTasks
                   .map(
                     (task) => MyTaskCard(
                       task: task,
@@ -57,7 +58,7 @@ class MyCompletedTaskListTab extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (context) =>
-                              MyTaskFormDialog.detail(task: task),
+                              MyTaskFormDialog.edit(task: task),
                         );
                       },
                     ),

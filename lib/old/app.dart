@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mdi_todo/blocs/stream_theme_mode_bloc/stream_theme_mode_bloc.dart';
-import 'package:mdi_todo/screens/home_screen.dart';
-import 'package:mdi_todo/screens/splash_screen.dart';
+import 'package:mdi_todo/old/blocs/stream_theme_mode_bloc/stream_theme_mode_bloc.dart';
+import 'package:mdi_todo/old/screens/home_screen.dart';
+import 'package:mdi_todo/old/screens/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
