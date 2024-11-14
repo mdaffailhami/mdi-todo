@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mdi_todo/core/dependency_injections.dart';
 import 'package:mdi_todo/presentation/pages/home_page.dart';
+import 'package:mdi_todo/presentation/providers/tasks_provider.dart';
 import 'package:mdi_todo/presentation/providers/theme_mode_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => getIt.get<ThemeModeProvider>()),
+        ChangeNotifierProvider(create: (_) => getIt.get<TasksProvider>()),
       ],
       child: const MyApp(),
     ),

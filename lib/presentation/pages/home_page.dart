@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mdi_todo/presentation/components/app_bar.dart';
 import 'package:mdi_todo/presentation/components/task_form_dialog.dart';
+import 'package:mdi_todo/presentation/tabs/active_task_list_tab.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -58,8 +59,9 @@ class _MyHomePageState extends State<MyHomePage>
         body: TabBarView(
           controller: tabController,
           children: const [
-            // MyActiveTaskListTab(),
+            MyActiveTaskListTab(),
             // MyCompletedTaskListTab(),
+            SizedBox(),
           ],
         ),
       ),
