@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mdi_todo/presentation/components/app_bar.dart';
 import 'package:mdi_todo/presentation/components/task_form_dialog.dart';
-import 'package:mdi_todo/presentation/tabs/active_task_list_tab.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -36,10 +35,12 @@ class _MyHomePageState extends State<MyHomePage>
         return Scaffold(
           floatingActionButton: value == 0
               ? FloatingActionButton(
-                  onPressed: () => showDialog(
-                    context: context,
-                    builder: (context) => const MyTaskFormDialog.add(),
-                  ),
+                  onPressed: () {
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (context) => const MyTaskFormDialog.add(),
+                    // );
+                  },
                   tooltip: 'Add task',
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   child: Icon(
@@ -59,8 +60,9 @@ class _MyHomePageState extends State<MyHomePage>
         body: TabBarView(
           controller: tabController,
           children: const [
-            MyActiveTaskListTab(),
+            // MyActiveTaskListTab(),
             // MyCompletedTaskListTab(),
+            SizedBox(),
             SizedBox(),
           ],
         ),

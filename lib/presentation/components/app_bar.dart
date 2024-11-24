@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mdi_todo/presentation/providers/theme_mode_provider.dart';
+import 'package:mdi_todo/presentation/notifiers/theme_mode_notifier.dart';
 import 'package:provider/provider.dart';
 
 class MyAppBar extends StatelessWidget {
@@ -22,13 +22,13 @@ class MyAppBar extends StatelessWidget {
                 : Brightness.light,
       ),
       actions: [
-        Consumer<ThemeModeProvider>(
+        Consumer<ThemeModeNotifier>(
           builder: (context, themeMode, child) {
             if (themeMode.value == ThemeMode.light) {
               return IconButton(
                 tooltip: 'Change theme to Dark Mode',
                 onPressed: () {
-                  context.read<ThemeModeProvider>().change(ThemeMode.dark);
+                  context.read<ThemeModeNotifier>().change(ThemeMode.dark);
                 },
                 icon: const Icon(Icons.light_mode_outlined),
               );
@@ -38,7 +38,7 @@ class MyAppBar extends StatelessWidget {
               return IconButton(
                 tooltip: 'Change theme to System Mode',
                 onPressed: () {
-                  context.read<ThemeModeProvider>().change(ThemeMode.system);
+                  context.read<ThemeModeNotifier>().change(ThemeMode.system);
                 },
                 icon: const Icon(Icons.dark_mode_outlined),
               );
@@ -47,7 +47,7 @@ class MyAppBar extends StatelessWidget {
             return IconButton(
               tooltip: 'Change theme to Light Mode',
               onPressed: () {
-                context.read<ThemeModeProvider>().change(ThemeMode.light);
+                context.read<ThemeModeNotifier>().change(ThemeMode.light);
               },
               icon: const Icon(Icons.auto_awesome_outlined),
             );

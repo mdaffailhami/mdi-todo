@@ -1,33 +1,29 @@
-import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
-import 'package:mdi_todo/core/request_failure.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeModeLocalDataSource {
-  final SharedPreferences sharedPreferences;
+  final SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
 
-  ThemeModeLocalDataSource({required this.sharedPreferences});
-
-  Either<RequestFailure, void> setThemeMode(ThemeMode themeMode) {
+  void set(ThemeMode themeMode) {
     try {
       sharedPreferences.setString('theme_mode', themeMode.name);
-      return const Right(null);
     } catch (e) {
-      return Left(RequestFailure(e.toString()));
+      throw Exception('Set theme mode failed: ${e.toString()}');
     }
   }
 
-  Either<RequestFailure, ThemeMode?> getThemeMode() {
+  ThemeMode? get() {
     try {
       final themeModeName = sharedPreferences.getString('theme_mode');
 
-      if (themeModeName == null) return const Right(null);
+      if (themeModeName == null) return null;
 
-      return Right(ThemeMode.values.firstWhere(
+      return ThemeMode.values.firstWhere(
         (element) => element.name == themeModeName,
-      ));
+      );
     } catch (e) {
-      return Left(RequestFailure(e.toString()));
+      throw Exception('Get theme mode failed: ${e.toString()}');
     }
   }
 }

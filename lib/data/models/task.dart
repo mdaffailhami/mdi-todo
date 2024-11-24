@@ -1,48 +1,61 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
+import 'package:mdi_todo/data/models/completion.dart';
+
 class Task {
   String id;
-  String name;
+  String title;
   DateTime deadline;
-  bool completed;
-  DateTime? completionDateTime;
+  Completion completion;
 
   Task({
     required this.id,
-    required this.name,
+    required this.title,
     required this.deadline,
-    required this.completed,
-    this.completionDateTime,
+    required this.completion,
   });
 
-  factory Task.from(Task task) {
+  Task copyWith({
+    String? id,
+    String? title,
+    DateTime? deadline,
+    Completion? completion,
+  }) {
     return Task(
-      id: task.id,
-      name: task.name,
-      deadline: task.deadline,
-      completed: task.completed,
-      completionDateTime: task.completionDateTime,
-    );
-  }
-
-  factory Task.fromMap(Map<String, dynamic> map) {
-    return Task(
-      id: map['id'] as String,
-      name: map['name'] as String,
-      deadline: DateTime.parse(map['deadline'] as String),
-      completed: map['completed'] as bool,
-      completionDateTime: map['completionDateTime'] != null
-          ? DateTime.parse(map['completionDateTime'] as String)
-          : null,
+      id: id ?? this.id,
+      title: title ?? this.title,
+      deadline: deadline ?? this.deadline,
+      completion: completion ?? this.completion,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'name': name,
-      'deadline': deadline.toString(),
-      'completed': completed,
-      'completionDateTime': completionDateTime?.toString(),
+      'title': title,
+      'deadline': deadline.millisecondsSinceEpoch,
+      'completion': completion.toMap(),
     };
+  }
+
+  factory Task.fromMap(Map<String, dynamic> map) {
+    return Task(
+      id: map['id'] as String,
+      title: map['title'] as String,
+      deadline: DateTime.fromMillisecondsSinceEpoch(map['deadline'] as int),
+      completion: Completion.fromMap(map['completion'] as Map<String, dynamic>),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Task.fromJson(String source) =>
+      Task.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'Task(id: $id, title: $title, deadline: $deadline, completion: $completion)';
   }
 
   @override
@@ -50,23 +63,16 @@ class Task {
     if (identical(this, other)) return true;
 
     return other.id == id &&
-        other.name == name &&
+        other.title == title &&
         other.deadline == deadline &&
-        other.completed == completed &&
-        other.completionDateTime == completionDateTime;
+        other.completion == completion;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-        name.hashCode ^
+        title.hashCode ^
         deadline.hashCode ^
-        completed.hashCode ^
-        completionDateTime.hashCode;
-  }
-
-  @override
-  String toString() {
-    return 'Task(id: $id, name: $name, deadline: $deadline, completed: $completed, completionDateTime: $completionDateTime)';
+        completion.hashCode;
   }
 }
