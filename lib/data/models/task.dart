@@ -1,32 +1,30 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:mdi_todo/data/models/completion.dart';
-
 class Task {
-  String id;
-  String title;
-  DateTime deadline;
-  Completion completion;
+  final String id;
+  final String title;
+  final DateTime deadline;
+  final DateTime? completedAt;
 
-  Task({
+  const Task({
     required this.id,
     required this.title,
     required this.deadline,
-    required this.completion,
+    this.completedAt,
   });
 
   Task copyWith({
     String? id,
     String? title,
     DateTime? deadline,
-    Completion? completion,
+    DateTime? completedAt,
   }) {
     return Task(
       id: id ?? this.id,
       title: title ?? this.title,
       deadline: deadline ?? this.deadline,
-      completion: completion ?? this.completion,
+      completedAt: completedAt ?? this.completedAt,
     );
   }
 
@@ -35,7 +33,7 @@ class Task {
       'id': id,
       'title': title,
       'deadline': deadline.millisecondsSinceEpoch,
-      'completion': completion.toMap(),
+      'completedAt': completedAt?.millisecondsSinceEpoch,
     };
   }
 
@@ -44,7 +42,9 @@ class Task {
       id: map['id'] as String,
       title: map['title'] as String,
       deadline: DateTime.fromMillisecondsSinceEpoch(map['deadline'] as int),
-      completion: Completion.fromMap(map['completion'] as Map<String, dynamic>),
+      completedAt: map['completedAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['completedAt'] as int)
+          : null,
     );
   }
 
@@ -55,7 +55,7 @@ class Task {
 
   @override
   String toString() {
-    return 'Task(id: $id, title: $title, deadline: $deadline, completion: $completion)';
+    return 'Task(id: $id, title: $title, deadline: $deadline, completedAt: $completedAt)';
   }
 
   @override
@@ -65,7 +65,7 @@ class Task {
     return other.id == id &&
         other.title == title &&
         other.deadline == deadline &&
-        other.completion == completion;
+        other.completedAt == completedAt;
   }
 
   @override
@@ -73,6 +73,6 @@ class Task {
     return id.hashCode ^
         title.hashCode ^
         deadline.hashCode ^
-        completion.hashCode;
+        completedAt.hashCode;
   }
 }

@@ -25,7 +25,7 @@ class _MyTaskCardState extends State<MyTaskCard> {
   @override
   void initState() {
     super.initState();
-    checked = widget.task.completion.isCompleted;
+    checked = widget.task.completedAt != null;
   }
 
   @override

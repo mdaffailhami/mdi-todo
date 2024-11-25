@@ -21,9 +21,8 @@ class MyActiveTaskListTab extends StatelessWidget {
         }
 
         // Filter only active tasks to show
-        final activeTasks = notifier.value
-            .where((task) => !task.completion.isCompleted)
-            .toList();
+        final activeTasks =
+            notifier.value.where((task) => task.completedAt == null).toList();
 
         if (activeTasks.isEmpty) {
           return Center(

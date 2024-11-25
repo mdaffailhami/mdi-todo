@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:mdi_todo/core/utils/generate_uid.dart';
-import 'package:mdi_todo/data/models/completion.dart';
 import 'package:mdi_todo/data/models/task.dart';
 import 'package:mdi_todo/data/repositories/tasks_repository.dart';
 
@@ -40,7 +39,6 @@ class TasksNotifier extends ChangeNotifier {
         id: generateUid(),
         title: title,
         deadline: deadline,
-        completion: Completion(isCompleted: false, completedAt: null),
       );
 
       await _repository.add(task);
@@ -90,10 +88,7 @@ class TasksNotifier extends ChangeNotifier {
   Future<void> _markTask(Task task, bool isCompleted) async {
     try {
       final newTask = task.copyWith(
-        completion: Completion(
-          isCompleted: isCompleted,
-          completedAt: DateTime.now(),
-        ),
+        completedAt: DateTime.now(),
       );
 
       await _repository.edit(newTask);

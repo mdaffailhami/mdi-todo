@@ -1,4 +1,3 @@
-import 'package:mdi_todo/core/utils/generate_uid.dart';
 import 'package:mdi_todo/data/data_sources/local/tasks_local_data_source.dart';
 import 'package:mdi_todo/data/models/task.dart';
 
