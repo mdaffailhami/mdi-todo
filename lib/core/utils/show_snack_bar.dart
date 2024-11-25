@@ -10,7 +10,7 @@ void showSnackBar({
     SnackBar(
       content: Text(label),
       action: SnackBarAction(
-        label: 'DISMISS',
+        label: 'Dismiss',
         onPressed: () {},
         textColor: Theme.of(context).colorScheme.secondaryContainer,
       ),
