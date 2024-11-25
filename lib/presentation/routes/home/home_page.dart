@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
 import 'package:mdi_todo/presentation/routes/home/app_bar.dart';
+import 'package:mdi_todo/presentation/routes/home/completed_tasks/completed_task_list_tab.dart';
 import 'package:mdi_todo/presentation/routes/home/task_form_dialog.dart';
 import 'package:mdi_todo/presentation/routes/home/active_tasks/active_task_list_tab.dart';
 import 'package:provider/provider.dart';
@@ -67,9 +68,7 @@ class _MyHomePageState extends State<MyHomePage>
           controller: _tabController,
           children: const [
             MyActiveTaskListTab(),
-            // MyCompletedTaskListTab(),
-            // SizedBox(),
-            SizedBox(),
+            MyCompletedTaskListTab(),
           ],
         ),
       ),
