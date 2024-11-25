@@ -52,13 +52,22 @@ class TasksNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> edit(Task task) async {
+  Future<void> edit(
+    Task task, {
+    required String title,
+    required DateTime deadline,
+  }) async {
     try {
-      await _repository.edit(task);
+      final newTask = task.copyWith(
+        title: title,
+        deadline: deadline,
+      );
+
+      await _repository.edit(newTask);
 
       final index = _value.indexWhere((element) => element.id == task.id);
 
-      _value[index] = task;
+      _value[index] = newTask;
       notifyListeners();
     } catch (e) {
       rethrow;

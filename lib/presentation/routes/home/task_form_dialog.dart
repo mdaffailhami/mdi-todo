@@ -81,12 +81,12 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
     if (formKey.currentState!.validate() == false) return;
 
     try {
-      final task = widget.task!.copyWith(
-        title: title,
-        deadline: deadline,
-      );
+      context.read<TasksNotifier>().edit(
+            widget.task!,
+            title: title,
+            deadline: deadline,
+          );
 
-      context.read<TasksNotifier>().edit(task);
       if (mounted) showSnackBar(context: context, label: 'Edit task success');
     } catch (e) {
       if (mounted) showSnackBar(context: context, label: e.toString());
