@@ -65,8 +65,6 @@ class _MyTaskCardState extends State<MyTaskCard> {
                     );
                   }
                 } catch (e) {
-                  setState(() => checked = !checked);
-
                   if (context.mounted) {
                     showSnackBar(
                       context: context,
@@ -87,8 +85,6 @@ class _MyTaskCardState extends State<MyTaskCard> {
                     );
                   }
                 } catch (e) {
-                  setState(() => checked = !checked);
-
                   if (context.mounted) {
                     showSnackBar(
                       context: context,
@@ -97,6 +93,9 @@ class _MyTaskCardState extends State<MyTaskCard> {
                   }
                 }
               }
+
+              // Fix bug below task got checked
+              setState(() => checked = !checked);
             });
           },
         ),

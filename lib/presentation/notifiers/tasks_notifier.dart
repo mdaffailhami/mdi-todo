@@ -103,10 +103,18 @@ class TasksNotifier extends ChangeNotifier {
   }
 
   Future<void> markTaskAsCompleted(Task task) async {
-    await _markTask(task, true);
+    try {
+      await _markTask(task, true);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> markTaskAsActive(Task task) async {
-    await _markTask(task, false);
+    try {
+      await _markTask(task, false);
+    } catch (e) {
+      rethrow;
+    }
   }
 }
