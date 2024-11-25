@@ -3,11 +3,10 @@ import 'dart:convert';
 
 class Completion {
   bool isCompleted;
-  DateTime completedAt;
-
+  DateTime? completedAt;
   Completion({
     required this.isCompleted,
-    required this.completedAt,
+    this.completedAt,
   });
 
   Completion copyWith({
@@ -23,15 +22,16 @@ class Completion {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'isCompleted': isCompleted,
-      'completedAt': completedAt.millisecondsSinceEpoch,
+      'completedAt': completedAt?.millisecondsSinceEpoch,
     };
   }
 
   factory Completion.fromMap(Map<String, dynamic> map) {
     return Completion(
       isCompleted: map['isCompleted'] as bool,
-      completedAt:
-          DateTime.fromMillisecondsSinceEpoch(map['completedAt'] as int),
+      completedAt: map['completedAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['completedAt'] as int)
+          : null,
     );
   }
 
