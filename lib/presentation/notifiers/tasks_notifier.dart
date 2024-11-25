@@ -86,4 +86,32 @@ class TasksNotifier extends ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> _markTask(Task task, bool isCompleted) async {
+    try {
+      final newTask = task.copyWith(
+        completion: Completion(
+          isCompleted: isCompleted,
+          completedAt: DateTime.now(),
+        ),
+      );
+
+      await _repository.edit(newTask);
+
+      final index = _value.indexWhere((element) => element.id == task.id);
+
+      _value[index] = newTask;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> markTaskAsCompleted(Task task) async {
+    await _markTask(task, true);
+  }
+
+  Future<void> markTaskAsActive(Task task) async {
+    await _markTask(task, false);
+  }
 }

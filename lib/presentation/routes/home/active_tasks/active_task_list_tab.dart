@@ -20,7 +20,12 @@ class MyActiveTaskListTab extends StatelessWidget {
           return Center(child: Text(notifier.error.toString()));
         }
 
-        if (notifier.value.isEmpty) {
+        // Filter only active tasks to show
+        final activeTasks = notifier.value
+            .where((task) => !task.completion.isCompleted)
+            .toList();
+
+        if (activeTasks.isEmpty) {
           return Center(
             child: Text(
               'No active tasks',
@@ -34,19 +39,17 @@ class MyActiveTaskListTab extends StatelessWidget {
 
         return ListView(
           padding: EdgeInsets.zero,
-          children: notifier.value
-              .map(
-                (task) => MyTaskCard(
-                  task: task,
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => MyTaskFormDialog.edit(task: task),
-                    );
-                  },
-                ),
-              )
-              .toList(),
+          children: activeTasks.map((task) {
+            return MyTaskCard(
+              task: task,
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => MyTaskFormDialog.edit(task: task),
+                );
+              },
+            );
+          }).toList(),
         );
       },
     );

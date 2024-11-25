@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/core/utils/format_date.dart';
+import 'package:mdi_todo/core/utils/show_snack_bar.dart';
 import 'package:mdi_todo/data/models/task.dart';
+import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
 
 class MyTaskCard extends StatefulWidget {
   final Task task;
@@ -41,19 +43,61 @@ class _MyTaskCardState extends State<MyTaskCard> {
           value: checked,
           checkColor: Theme.of(context).colorScheme.surface,
           onChanged: (value) {
-            // if (value == null) return;
+            if (value == null) return;
 
-            // setState(() => checked = !checked);
-            // Future.delayed(const Duration(milliseconds: 300)).then((_) {
-            //   if (value == true) {
-            //     BlocProvider.of<MarkTaskAsCompletedBloc>(context)
-            //         .markTaskAsCompleted(widget.task);
-            //   } else if (value == false) {
-            //     BlocProvider.of<MarkTaskAsActiveBloc>(context)
-            //         .markTaskAsActive(widget.task);
-            //   }
-            //   checked = !checked;
-            // });
+            if (!mounted) return;
+
+            setState(() => checked = !checked);
+
+            Future.delayed(const Duration(milliseconds: 300)).then((_) async {
+              if (!context.mounted) return;
+
+              if (value == true) {
+                try {
+                  await context
+                      .read<TasksNotifier>()
+                      .markTaskAsCompleted(widget.task);
+
+                  if (context.mounted) {
+                    showSnackBar(
+                      context: context,
+                      label: 'Mark task as completed success',
+                    );
+                  }
+                } catch (e) {
+                  setState(() => checked = !checked);
+
+                  if (context.mounted) {
+                    showSnackBar(
+                      context: context,
+                      label: 'Mark task as completed failed',
+                    );
+                  }
+                }
+              } else if (value == false) {
+                try {
+                  await context
+                      .read<TasksNotifier>()
+                      .markTaskAsActive(widget.task);
+
+                  if (context.mounted) {
+                    showSnackBar(
+                      context: context,
+                      label: 'Mark task as active success',
+                    );
+                  }
+                } catch (e) {
+                  setState(() => checked = !checked);
+
+                  if (context.mounted) {
+                    showSnackBar(
+                      context: context,
+                      label: 'Mark task as active failed',
+                    );
+                  }
+                }
+              }
+            });
           },
         ),
       ),
