@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mdi_todo/presentation/components/app_bar.dart';
-import 'package:mdi_todo/presentation/components/task_form_dialog.dart';
+import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
+import 'package:mdi_todo/presentation/routes/home/app_bar.dart';
+import 'package:mdi_todo/presentation/routes/home/task_form_dialog.dart';
+import 'package:mdi_todo/presentation/routes/home/active_tasks/active_task_list_tab.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -11,35 +14,38 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  late TabController tabController;
-  final currentTabIndex = ValueNotifier(0);
+  late final TabController _tabController;
+  final _currentTabIndex = ValueNotifier(0);
 
   @override
   void initState() {
     super.initState();
 
-    // BlocProvider.of<StreamTasksBloc>(context).streamTasks();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Load user's tasks
+      context.read<TasksNotifier>().load();
+    });
 
-    tabController = TabController(vsync: this, length: 2);
+    _tabController = TabController(vsync: this, length: 2);
 
-    tabController.addListener(() {
-      currentTabIndex.value = tabController.index;
+    _tabController.addListener(() {
+      _currentTabIndex.value = _tabController.index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: currentTabIndex,
+      valueListenable: _currentTabIndex,
       builder: (context, value, child) {
         return Scaffold(
           floatingActionButton: value == 0
               ? FloatingActionButton(
                   onPressed: () {
-                    // showDialog(
-                    //   context: context,
-                    //   builder: (context) => const MyTaskFormDialog.add(),
-                    // );
+                    showDialog(
+                      context: context,
+                      builder: (context) => const MyTaskFormDialog.add(),
+                    );
                   },
                   tooltip: 'Add task',
                   backgroundColor: Theme.of(context).colorScheme.primary,
@@ -55,14 +61,14 @@ class _MyHomePageState extends State<MyHomePage>
       child: NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [MyAppBar(tabController: tabController)];
+          return [MyAppBar(tabController: _tabController)];
         },
         body: TabBarView(
-          controller: tabController,
+          controller: _tabController,
           children: const [
-            // MyActiveTaskListTab(),
+            MyActiveTaskListTab(),
             // MyCompletedTaskListTab(),
-            SizedBox(),
+            // SizedBox(),
             SizedBox(),
           ],
         ),

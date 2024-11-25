@@ -9,7 +9,7 @@ class ThemeModeLocalDataSource {
     try {
       sharedPreferences.setString('theme_mode', themeMode.name);
     } catch (e) {
-      throw Exception('Set theme mode failed: ${e.toString()}');
+      throw Exception('Set theme mode failed : ${e.toString()}');
     }
   }
 

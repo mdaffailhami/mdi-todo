@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 class MyAppBar extends StatelessWidget {
   final TabController tabController;
+
   const MyAppBar({super.key, required this.tabController});
 
   @override

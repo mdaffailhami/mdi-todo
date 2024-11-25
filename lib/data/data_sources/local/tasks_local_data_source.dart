@@ -1,37 +1,46 @@
-// import 'package:either_dart/either.dart';
-// import 'package:localstore/localstore.dart';
-// import 'package:mdi_todo/core/request_failure.dart';
+import 'package:localstore/localstore.dart';
+import 'package:mdi_todo/data/models/task.dart';
 
-// class TasksLocalDataSource {
-//   final Localstore localstore;
+class TasksLocalDataSource {
+  final CollectionRef _collection = Localstore.instance.collection('tasks');
 
-//   TasksLocalDataSource({required this.localstore});
+  Future<List<Task>> get() async {
+    try {
+      final docs = await _collection.get();
 
-//   Future<Either<RequestFailure, List<Map<String, dynamic>>>> getTasks() async {
-//     try {
-//       final docs = await localstore.collection('tasks').get();
+      if (docs == null) return [];
 
-//       if (docs == null) return const Right([]);
+      final List<Task> tasks = [];
 
-//       final List<Map<String, dynamic>> docsNew = [];
+      docs.forEach((key, value) => tasks.add(Task.fromMap(value)));
 
-//       docs.forEach((key, value) => docsNew.add(value));
+      return tasks;
+    } catch (e) {
+      throw Exception('Get tasks failed: ${e.toString()}');
+    }
+  }
 
-//       return Right(docsNew);
-//     } catch (e) {
-//       return Left(RequestFailure(e.toString()));
-//     }
-//   }
+  Future<void> add(Task task) async {
+    try {
+      await _collection.doc(task.id).set(task.toMap());
+    } catch (e) {
+      throw Exception('Add task failed: ${e.toString()}');
+    }
+  }
 
-//   Future<Either<RequestFailure, void>> addTask(
-//     Map<String, dynamic> task,
-//   ) async {
-//     try {
-//       await localstore.collection('tasks').doc(task['id']).set(task);
+  Future<void> edit(Task task) async {
+    try {
+      await _collection.doc(task.id).set(task.toMap());
+    } catch (e) {
+      throw Exception('Edit task failed: ${e.toString()}');
+    }
+  }
 
-//       return const Right(null);
-//     } catch (e) {
-//       return Left(RequestFailure(e.toString()));
-//     }
-//   }
-// }
+  Future<void> delete(Task task) async {
+    try {
+      await _collection.doc(task.id).delete();
+    } catch (e) {
+      throw Exception('Delete task failed: ${e.toString()}');
+    }
+  }
+}

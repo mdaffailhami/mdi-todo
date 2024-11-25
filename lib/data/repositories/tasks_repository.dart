@@ -1,45 +1,39 @@
-// import 'package:either_dart/either.dart';
-// import 'package:mdi_todo/core/request_failure.dart';
-// import 'package:mdi_todo/core/utils/generate_uid.dart';
-// import 'package:mdi_todo/data/data_sources/local/tasks_local_data_source.dart';
-// import 'package:mdi_todo/data/models/task.dart';
+import 'package:mdi_todo/core/utils/generate_uid.dart';
+import 'package:mdi_todo/data/data_sources/local/tasks_local_data_source.dart';
+import 'package:mdi_todo/data/models/task.dart';
 
-// class TasksRepository {
-//   final TasksLocalDataSource localDataSource;
+class TasksRepository {
+  final TasksLocalDataSource localDataSource = TasksLocalDataSource();
 
-//   TasksRepository({required this.localDataSource});
+  Future<List<Task>> get() async {
+    try {
+      return await localDataSource.get();
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-//   Future<Either<RequestFailure, List<Task>>> getTasks() async {
-//     final docs = await localDataSource.getTasks();
+  Future<void> add(Task task) async {
+    try {
+      localDataSource.add(task);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-//     return docs.fold(
-//       (failure) {
-//         return Left(failure);
-//       },
-//       (value) {
-//         return Right(value.map((e) => Task.fromMap(e)).toList());
-//       },
-//     );
-//   }
+  Future<void> edit(Task task) async {
+    try {
+      localDataSource.edit(task);
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-//   Future<Either<RequestFailure, Task>> addTask({
-//     required String name,
-//     required DateTime deadline,
-//   }) async {
-//     final task = Task(
-//       id: generateUid(),
-//       name: name,
-//       deadline: deadline,
-//       completed: false,
-//     );
-
-//     return localDataSource.addTask(task.toMap()).fold(
-//       (left) {
-//         return Left(left);
-//       },
-//       (right) {
-//         return Right(task);
-//       },
-//     );
-//   }
-// }
+  Future<void> delete(Task task) async {
+    try {
+      localDataSource.delete(task);
+    } catch (e) {
+      rethrow;
+    }
+  }
+}
