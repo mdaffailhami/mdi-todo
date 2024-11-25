@@ -113,11 +113,48 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                type == TaskFormDialogType.edit
-                    ? 'Edit your task'
-                    : 'Task completed',
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              Builder(
+                builder: (context) {
+                  if (type == TaskFormDialogType.edit) {
+                    return Text(
+                      'Edit your task',
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                    );
+                  } else {
+                    return RichText(
+                      text: TextSpan(
+                        text: 'Task was completed\n',
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'at ',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                          ),
+                          TextSpan(
+                            text: formatDate(widget.task!.completedAt!),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  color: Colors.orange,
+                                ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
               ),
               IconButton(
                 onPressed: () {
