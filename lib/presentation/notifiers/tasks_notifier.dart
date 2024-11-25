@@ -88,7 +88,7 @@ class TasksNotifier extends ChangeNotifier {
   Future<void> _markTask(Task task, bool isCompleted) async {
     try {
       final newTask = task.copyWith(
-        completedAt: DateTime.now(),
+        completedAt: () => isCompleted ? DateTime.now() : null,
       );
 
       await _repository.edit(newTask);

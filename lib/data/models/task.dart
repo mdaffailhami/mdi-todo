@@ -18,13 +18,14 @@ class Task {
     String? id,
     String? title,
     DateTime? deadline,
-    DateTime? completedAt,
+    // Use function in order to be able to set a value to null
+    DateTime? Function()? completedAt,
   }) {
     return Task(
       id: id ?? this.id,
       title: title ?? this.title,
       deadline: deadline ?? this.deadline,
-      completedAt: completedAt ?? this.completedAt,
+      completedAt: completedAt == null ? null : completedAt(),
     );
   }
 
