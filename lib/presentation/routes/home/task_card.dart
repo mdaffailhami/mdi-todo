@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mdi_todo/core/utils/format_date.dart';
 import 'package:mdi_todo/core/utils/show_snack_bar.dart';
 import 'package:mdi_todo/data/models/task.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
+import 'package:provider/provider.dart';
 
 class MyTaskCard extends StatefulWidget {
   final Task task;
