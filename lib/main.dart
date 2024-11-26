@@ -16,7 +16,7 @@ Future<void> main() async {
 
   if (defaultTargetPlatform == TargetPlatform.android) {
     // Initialize android notification service
-    GetIt.I.get<NotificationService>().initialize();
+    await GetIt.I.get<NotificationService>().initialize();
   }
 
   runApp(
