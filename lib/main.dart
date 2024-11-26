@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mdi_todo/core/dependencies.dart';
+import 'package:mdi_todo/core/services/notification_service.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
 import 'package:mdi_todo/presentation/notifiers/theme_mode_notifier.dart';
 import 'package:mdi_todo/presentation/routes/home/home_page.dart';
@@ -7,7 +10,14 @@ import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Inject GetIt dependencies
   await injectDependencies();
+
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    // Initialize android notification service
+    GetIt.I.get<NotificationService>().initialize();
+  }
 
   runApp(
     MultiProvider(
