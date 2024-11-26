@@ -7,9 +7,7 @@ Future<void> injectDependencies() async {
     () async => await SharedPreferences.getInstance(),
   );
 
-  GetIt.I.registerSingleton(
-    () => Localstore.instance,
-  );
+  GetIt.I.registerSingleton(Localstore.instance);
 
   await GetIt.I.allReady();
 }
