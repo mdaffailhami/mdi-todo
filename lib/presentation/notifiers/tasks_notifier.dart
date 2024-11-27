@@ -43,6 +43,8 @@ class TasksNotifier extends ChangeNotifier {
 
       await _repository.add(task);
 
+      await _repository.scheduleNotification(task);
+
       _value.add(task);
       notifyListeners();
     } catch (e) {
@@ -75,6 +77,7 @@ class TasksNotifier extends ChangeNotifier {
   Future<void> delete(Task task) async {
     try {
       await _repository.delete(task);
+      await _repository.cancelNotification(task);
 
       final index = _value.indexWhere((element) => element.id == task.id);
 

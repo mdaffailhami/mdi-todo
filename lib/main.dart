@@ -7,6 +7,7 @@ import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
 import 'package:mdi_todo/presentation/notifiers/theme_mode_notifier.dart';
 import 'package:mdi_todo/presentation/routes/home/home_page.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,7 @@ Future<void> main() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
     // Initialize android notification service
     await GetIt.I.get<NotificationService>().initialize();
+    tz.initializeTimeZones();
   }
 
   runApp(

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:mdi_todo/core/services/notification_service.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
 import 'package:mdi_todo/presentation/routes/home/app_bar.dart';
 import 'package:mdi_todo/presentation/routes/home/completed_tasks/completed_task_list_tab.dart';
 import 'package:mdi_todo/presentation/routes/home/task_form_dialog.dart';
 import 'package:mdi_todo/presentation/routes/home/active_tasks/active_task_list_tab.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -22,9 +25,20 @@ class _MyHomePageState extends State<MyHomePage>
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Load user's tasks
       context.read<TasksNotifier>().load();
+
+      // Request notification permission
+      await GetIt.I<NotificationService>().requestPermission();
+
+      final permissionStatus =
+          await GetIt.I<NotificationService>().permissionStatus;
+
+      // If notification permission is not granted, show explanation
+      if (!permissionStatus.isGranted && mounted) {
+        showNotificationPermissionExplanation(context);
+      }
     });
 
     _tabController = TabController(vsync: this, length: 2);
@@ -32,6 +46,36 @@ class _MyHomePageState extends State<MyHomePage>
     _tabController.addListener(() {
       _currentTabIndex.value = _tabController.index;
     });
+  }
+
+  void showNotificationPermissionExplanation(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          title: const Text('Permission Needed'),
+          content: const Text(
+            'We need notification permission to remind you about your tasks. '
+            'Please enable it in app settings.',
+          ),
+          actions: [
+            // TextButton(
+            //   onPressed: () => Navigator.of(context).pop(),
+            //   child: const Text('Cancel'),
+            // ),
+            TextButton(
+              onPressed: () async {
+                await openAppSettings();
+                Navigator.pop(context);
+              },
+              child: const Text('Open Settings'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
