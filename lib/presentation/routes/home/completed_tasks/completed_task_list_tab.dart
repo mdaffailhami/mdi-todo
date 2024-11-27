@@ -38,17 +38,20 @@ class MyCompletedTaskListTab extends StatelessWidget {
 
         return ListView(
           padding: EdgeInsets.zero,
-          children: completedTasks.map((task) {
-            return MyTaskCard(
-              task: task,
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => MyTaskFormDialog.detail(task: task),
-                );
-              },
-            );
-          }).toList(),
+          children: [
+            ...completedTasks.map((task) {
+              return MyTaskCard(
+                task: task,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => MyTaskFormDialog.detail(task: task),
+                  );
+                },
+              );
+            }),
+            const SizedBox(height: 80),
+          ],
         );
       },
     );

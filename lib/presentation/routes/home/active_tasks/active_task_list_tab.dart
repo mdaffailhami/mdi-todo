@@ -38,17 +38,20 @@ class MyActiveTaskListTab extends StatelessWidget {
 
         return ListView(
           padding: EdgeInsets.zero,
-          children: activeTasks.map((task) {
-            return MyTaskCard(
-              task: task,
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => MyTaskFormDialog.edit(task: task),
-                );
-              },
-            );
-          }).toList(),
+          children: [
+            ...activeTasks.map((task) {
+              return MyTaskCard(
+                task: task,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => MyTaskFormDialog.edit(task: task),
+                  );
+                },
+              );
+            }),
+            const SizedBox(height: 80),
+          ],
         );
       },
     );
