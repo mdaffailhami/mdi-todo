@@ -17,13 +17,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final TabController _tabController;
   final _currentTabIndex = ValueNotifier(0);
+  bool _isNotificationPermissionExplanationOpened = false;
 
   @override
   void initState() {
     super.initState();
+
+    // Listen to app lifecycle changes
+    WidgetsBinding.instance.addObserver(this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Load user's tasks
@@ -35,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage>
       final permissionStatus =
           await GetIt.I<NotificationService>().permissionStatus;
 
-      // If notification permission is not granted, show explanation
+      // If notification permission is not granted, then show explanation
       if (!permissionStatus.isGranted && mounted) {
         showNotificationPermissionExplanation(context);
       }
@@ -48,7 +52,34 @@ class _MyHomePageState extends State<MyHomePage>
     });
   }
 
+  @override
+  void dispose() {
+    // Remove app lifecycle listener
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+
+    // Will run whenever the app resume after idle & permission explanation being opened
+    if (state == AppLifecycleState.resumed &&
+        _isNotificationPermissionExplanationOpened) {
+      final permissionStatus =
+          await GetIt.I<NotificationService>().permissionStatus;
+
+      // If notification permission is granted, then close explanation dialog
+      if (permissionStatus.isGranted && mounted) {
+        Navigator.of(context).pop();
+        _isNotificationPermissionExplanationOpened = false;
+      }
+    }
+  }
+
   void showNotificationPermissionExplanation(BuildContext context) {
+    _isNotificationPermissionExplanationOpened = true;
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -63,12 +94,11 @@ class _MyHomePageState extends State<MyHomePage>
           actions: [
             // TextButton(
             //   onPressed: () => Navigator.of(context).pop(),
-            //   child: const Text('Cancel'),
+            //   child: const Text('Cancel'),                Naviga                Navigator.pop(context);tor.pop(context);
             // ),
             TextButton(
               onPressed: () async {
                 await openAppSettings();
-                Navigator.pop(context);
               },
               child: const Text('Open Settings'),
             ),
