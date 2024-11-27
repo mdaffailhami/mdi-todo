@@ -43,7 +43,7 @@ class TasksNotifier extends ChangeNotifier {
 
       await _repository.add(task);
 
-      await _repository.scheduleNotification(task);
+      await _repository.setNotification(task);
 
       _value.add(task);
       notifyListeners();
@@ -64,6 +64,11 @@ class TasksNotifier extends ChangeNotifier {
       );
 
       await _repository.edit(newTask);
+
+      if (task.deadline != newTask.deadline) {
+        await _repository.cancelNotification(task);
+        await _repository.setNotification(newTask);
+      }
 
       final index = _value.indexWhere((element) => element.id == task.id);
 
@@ -108,6 +113,7 @@ class TasksNotifier extends ChangeNotifier {
   Future<void> markTaskAsCompleted(Task task) async {
     try {
       await _markTask(task, true);
+      await _repository.cancelNotification(task);
     } catch (e) {
       rethrow;
     }
@@ -116,6 +122,7 @@ class TasksNotifier extends ChangeNotifier {
   Future<void> markTaskAsActive(Task task) async {
     try {
       await _markTask(task, false);
+      await _repository.setNotification(task);
     } catch (e) {
       rethrow;
     }

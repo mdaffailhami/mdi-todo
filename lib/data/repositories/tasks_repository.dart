@@ -39,7 +39,7 @@ class TasksRepository {
     }
   }
 
-  Future<void> scheduleNotification(Task task) async {
+  Future<void> setNotification(Task task) async {
     final now = DateTime.now();
 
     final d1 =
