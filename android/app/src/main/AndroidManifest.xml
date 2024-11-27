@@ -9,7 +9,7 @@
     <!--/Added by MDI: Flutter "flutter_local_notifications" package -->
 
     <application
-        android:label="mdi_todo"
+        android:label="MDI Todo"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
