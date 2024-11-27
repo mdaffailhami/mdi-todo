@@ -24,6 +24,9 @@ class MyActiveTaskListTab extends StatelessWidget {
         final activeTasks =
             notifier.value.where((task) => task.completedAt == null).toList();
 
+        // Sort tasks by deadline (ascending)
+        activeTasks.sort((a, b) => a.deadline.compareTo(b.deadline));
+
         if (activeTasks.isEmpty) {
           return Center(
             child: Text(

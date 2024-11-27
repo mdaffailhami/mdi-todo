@@ -24,6 +24,9 @@ class MyCompletedTaskListTab extends StatelessWidget {
         final completedTasks =
             notifier.value.where((task) => task.completedAt != null).toList();
 
+        // Sort tasks by completed datetime (descending)
+        completedTasks.sort((a, b) => b.completedAt!.compareTo(a.completedAt!));
+
         if (completedTasks.isEmpty) {
           return Center(
             child: Text(
