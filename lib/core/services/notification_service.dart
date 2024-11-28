@@ -16,6 +16,7 @@ class NotificationService {
       channelDescription: 'Channel for task reminders',
       importance: Importance.high,
       priority: Priority.high,
+      icon: '@mipmap/ic_launcher',
     ),
   );
 

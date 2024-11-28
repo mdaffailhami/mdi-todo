@@ -35,6 +35,13 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.debug
+
+            // Added by MDI: For "flutter_local_notification" package
+            minifyEnabled true // Enables ProGuard
+            shrinkResources true // Optional: Shrinks unused resources
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'    
+            //\ Added by MDI: For "flutter_local_notification" package
+
         }
     }
 }
