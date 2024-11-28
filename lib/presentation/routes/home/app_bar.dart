@@ -14,7 +14,8 @@ class MyAppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       centerTitle: true,
-      surfaceTintColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      scrolledUnderElevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Theme.of(context).colorScheme.surface,
         statusBarIconBrightness:
