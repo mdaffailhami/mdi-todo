@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mdi_todo/core/services/notification_service.dart';
@@ -17,17 +19,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+    with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   final _currentTabIndex = ValueNotifier(0);
-  bool _isNotificationPermissionExplanationOpened = false;
 
   @override
   void initState() {
     super.initState();
-
-    // Listen to app lifecycle changes
-    WidgetsBinding.instance.addObserver(this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // Load user's tasks
@@ -39,8 +37,9 @@ class _MyHomePageState extends State<MyHomePage>
       final permissionStatus =
           await GetIt.I<NotificationService>().permissionStatus;
 
-      // If notification permission is not granted, then show explanation
-      if (!permissionStatus.isGranted && mounted) {
+      // If notification permission is not granted, then show explanation in 20% chance
+      final random = Random().nextDouble();
+      if (mounted && !permissionStatus.isGranted && random < 0.2) {
         showNotificationPermissionExplanation(context);
       }
     });
@@ -52,58 +51,30 @@ class _MyHomePageState extends State<MyHomePage>
     });
   }
 
-  @override
-  void dispose() {
-    // Remove app lifecycle listener
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    super.didChangeAppLifecycleState(state);
-
-    // Will run whenever the app resume after idle & permission explanation being opened
-    if (state == AppLifecycleState.resumed &&
-        _isNotificationPermissionExplanationOpened) {
-      final permissionStatus =
-          await GetIt.I<NotificationService>().permissionStatus;
-
-      // If notification permission is granted, then close explanation dialog
-      if (permissionStatus.isGranted && mounted) {
-        Navigator.of(context).pop();
-        _isNotificationPermissionExplanationOpened = false;
-      }
-    }
-  }
-
   void showNotificationPermissionExplanation(BuildContext context) {
-    _isNotificationPermissionExplanationOpened = true;
-
     showDialog(
       context: context,
-      barrierDismissible: false,
-      builder: (context) => PopScope(
-        canPop: false,
-        child: AlertDialog(
-          title: const Text('Permission Needed'),
-          content: const Text(
-            'We need notification permission to remind you about your tasks. '
-            'Please enable it in app settings.',
-          ),
-          actions: [
-            // TextButton(
-            //   onPressed: () => Navigator.of(context).pop(),
-            //   child: const Text('Cancel'),                Naviga                Navigator.pop(context);tor.pop(context);
-            // ),
-            TextButton(
-              onPressed: () async {
-                await openAppSettings();
-              },
-              child: const Text('Open Settings'),
-            ),
-          ],
+      builder: (context) => AlertDialog(
+        title: const Text('Permission recommended'),
+        content: const Text(
+          'We need notification permission to remind you about your tasks. '
+          'Please enable it in app settings.\n\n'
+          "Don't worry, your tasks won't be saved in our database. Instead, your tasks will only be saved locally on your phone.\n"
+          "So, we 100% know nothing about your tasks.",
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Don\'t notify'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await openAppSettings();
+              if (context.mounted) Navigator.pop(context);
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
       ),
     );
   }
