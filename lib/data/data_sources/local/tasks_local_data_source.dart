@@ -1,9 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:localstore/localstore.dart';
+import 'package:mdi_todo/core/dependencies.dart';
 import 'package:mdi_todo/data/models/task.dart';
 
 class TasksLocalDataSource {
-  final CollectionRef _collection = GetIt.I<Localstore>().collection('tasks');
+  final CollectionRef _collection = locator<Localstore>().collection('tasks');
 
   Future<List<Task>> get() async {
     try {

@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:home_widget/home_widget.dart';
+import 'package:mdi_todo/core/dependencies.dart';
+import 'package:mdi_todo/core/utils/format_date.dart';
+import 'package:mdi_todo/data/repositories/tasks_repository.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
 import 'package:mdi_todo/presentation/routes/home/task_card.dart';
 import 'package:mdi_todo/presentation/routes/home/task_form_dialog.dart';
@@ -26,6 +32,9 @@ class MyActiveTaskListTab extends StatelessWidget {
 
         // Sort tasks by deadline (ascending)
         activeTasks.sort((a, b) => a.deadline.compareTo(b.deadline));
+
+        // Save and update active tasks widget
+        locator<TasksRepository>().saveAndUpdateActiveTasksWidget(activeTasks);
 
         if (activeTasks.isEmpty) {
           return Center(

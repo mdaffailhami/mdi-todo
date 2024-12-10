@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:mdi_todo/core/dependencies.dart';
 import 'package:mdi_todo/core/utils/generate_uid.dart';
 import 'package:mdi_todo/data/models/task.dart';
 import 'package:mdi_todo/data/repositories/tasks_repository.dart';
@@ -12,7 +13,7 @@ class TasksNotifier extends ChangeNotifier {
   bool get isLoading => _isLoading;
   Exception? get error => _error;
 
-  final TasksRepository _repository = TasksRepository();
+  final TasksRepository _repository = locator<TasksRepository>();
 
   Future<void> load() async {
     try {

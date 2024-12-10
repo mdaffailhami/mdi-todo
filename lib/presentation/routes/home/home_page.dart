@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mdi_todo/core/dependencies.dart';
 import 'package:mdi_todo/core/services/notification_service.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
 import 'package:mdi_todo/presentation/routes/home/app_bar.dart';
@@ -32,10 +33,10 @@ class _MyHomePageState extends State<MyHomePage>
       context.read<TasksNotifier>().load();
 
       // Request notification permission
-      await GetIt.I<NotificationService>().requestPermission();
+      await locator<NotificationService>().requestPermission();
 
       final permissionStatus =
-          await GetIt.I<NotificationService>().permissionStatus;
+          await locator<NotificationService>().permissionStatus;
 
       // If notification permission is not granted, then show explanation in 20% chance
       final random = Random().nextDouble();

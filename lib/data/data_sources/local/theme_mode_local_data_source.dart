@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mdi_todo/core/dependencies.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeModeLocalDataSource {
-  final SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
+  final SharedPreferences sharedPreferences = locator<SharedPreferences>();
 
   void set(ThemeMode themeMode) {
     try {
