@@ -10,6 +10,24 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
+    // Added by MDI for Flutter "home_widget" package
+    buildFeatures {
+        compose true
+    }
+
+    dependencies {
+        implementation 'androidx.glance:glance:1.1.1'
+        implementation 'androidx.glance:glance-appwidget:1.1.1'
+        implementation 'androidx.glance:glance-preview:1.1.1'
+        implementation 'androidx.glance:glance-appwidget-preview:1.1.1'
+        implementation 'com.google.code.gson:gson:2.10.1'
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = '1.4.8'
+    }
+    // /Added by MDI for Flutter "home_widget" package
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
