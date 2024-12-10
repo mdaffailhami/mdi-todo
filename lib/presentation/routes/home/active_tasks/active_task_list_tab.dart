@@ -52,7 +52,7 @@ class MyActiveTaskListTab extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             ...activeTasks.map((task) {
-              return MyTaskCard(
+              return TaskCard(
                 task: task,
                 onTap: () {
                   showDialog(

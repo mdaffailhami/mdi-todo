@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mdi_todo/core/dependencies.dart';
 import 'package:mdi_todo/core/utils/generate_uid.dart';
+import 'package:mdi_todo/core/utils/show_snack_bar.dart';
 import 'package:mdi_todo/data/models/task.dart';
 import 'package:mdi_todo/data/repositories/tasks_repository.dart';
 
@@ -111,21 +113,45 @@ class TasksNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> markTaskAsCompleted(Task task) async {
+  Future<void> markTaskAsCompleted(BuildContext context, Task task) async {
     try {
       await _markTask(task, true);
       await _repository.cancelNotification(task);
+
+      if (context.mounted) {
+        showSnackBar(
+          context: context,
+          label: 'Mark task as completed success',
+        );
+      }
     } catch (e) {
-      rethrow;
+      if (context.mounted) {
+        showSnackBar(
+          context: context,
+          label: 'Mark task as completed failed',
+        );
+      }
     }
   }
 
-  Future<void> markTaskAsActive(Task task) async {
+  Future<void> markTaskAsActive(BuildContext context, Task task) async {
     try {
       await _markTask(task, false);
       await _repository.setNotification(task);
+
+      if (context.mounted) {
+        showSnackBar(
+          context: context,
+          label: 'Mark task as active success',
+        );
+      }
     } catch (e) {
-      rethrow;
+      if (context.mounted) {
+        showSnackBar(
+          context: context,
+          label: 'Mark task as active failed',
+        );
+      }
     }
   }
 }
