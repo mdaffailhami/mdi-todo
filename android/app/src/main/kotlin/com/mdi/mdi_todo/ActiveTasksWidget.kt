@@ -4,6 +4,7 @@ import HomeWidgetGlanceState
 import HomeWidgetGlanceStateDefinition
 import HomeWidgetGlanceWidgetReceiver
 import android.content.Context
+import android.net.Uri
 import android.provider.CalendarContract.Colors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -13,8 +14,12 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.action.ActionParameters
+import androidx.glance.action.actionParametersOf
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.ActionCallback
+import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
@@ -42,9 +47,19 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.actionStartActivity
 
-data class ActiveTask(val title: String, val deadline: String)
+data class ActiveTask(val id: String, val title: String, val deadline: String)
+
+class OpenTaskAction : ActionCallback {
+    override suspend fun onAction(context: Context, glanceId: GlanceId, parameters: ActionParameters) {
+        val taskId = parameters[ActionParameters.Key<String>("id")]
+
+        val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(context, Uri.parse("homewidget://com.mdi.mdi_todo/open-task/$taskId"))
+        backgroundIntent.send()
+    }
+}
 
 class ActiveTasksWidgetReceiver : HomeWidgetGlanceWidgetReceiver<ActiveTasksWidget>() {
     override val glanceAppWidget = ActiveTasksWidget()
@@ -148,7 +163,15 @@ class ActiveTasksWidget : GlanceAppWidget() {
                             .padding(10.dp)
                     ) {
                         items(activeTasks) { activeTask ->
-                            Column {
+                            Column(
+                                // Open task when clicked
+                                modifier = GlanceModifier.clickable(
+                                    onClick = actionStartActivity<MainActivity>(
+                                        context,
+                                        Uri.parse("homewidget://com.mdi.mdi_todo/open-task/${activeTask.id}")
+                                    )
+                                ).fillMaxWidth()
+                            ) {
                                 Text(
                                     text = activeTask.title,
                                     maxLines = 1,

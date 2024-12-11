@@ -15,6 +15,48 @@ class MyActiveTaskListTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onLaunchViaAppWidget(Uri? data) {
+      if (data == null) return;
+
+      // If not homewidget://com.mdi.mdi_todo, then return
+      if (data.scheme != 'homewidget') return;
+      if (data.host != 'com.mdi.mdi_todo') return;
+
+      final paths = data.pathSegments;
+      if (paths.isEmpty) return;
+
+      // mdi-todo://open-task
+      if (paths[0] == 'open-task') {
+        // mdi-todo://open-task/<task_id>
+        if (paths.length == 2) {
+          final taskId = paths[1];
+
+          if (!context.mounted) return;
+
+          final task = context.read<TasksNotifier>().getById(taskId);
+
+          if (task == null) return;
+
+          // Pop all routes first before showing the dialog
+          while (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+
+          // Show task form dialog
+          showDialog(
+            context: context,
+            builder: (context) {
+              return MyTaskFormDialog.edit(task: task);
+            },
+          );
+        }
+      }
+    }
+
+    // Register callback that is called when the app is launched via app widget by clicking a task
+    HomeWidget.initiallyLaunchedFromHomeWidget().then(onLaunchViaAppWidget);
+    HomeWidget.widgetClicked.listen(onLaunchViaAppWidget);
+
     return Consumer<TasksNotifier>(
       builder: (context, notifier, child) {
         if (notifier.isLoading) {

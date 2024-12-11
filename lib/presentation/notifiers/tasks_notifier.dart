@@ -36,6 +36,14 @@ class TasksNotifier extends ChangeNotifier {
     }
   }
 
+  Task? getById(String id) {
+    try {
+      return _value.firstWhere((task) => task.id == id);
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<void> add({required String title, required DateTime deadline}) async {
     try {
       final task = Task(

@@ -89,6 +89,7 @@ class TasksRepository {
       jsonEncode(
         activeTasks
             .map((task) => {
+                  'id': task.id,
                   'title': task.title,
                   'deadline': formatDate(task.deadline),
                 })
