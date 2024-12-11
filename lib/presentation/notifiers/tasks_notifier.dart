@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mdi_todo/core/dependencies.dart';
 import 'package:mdi_todo/core/utils/generate_uid.dart';

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:mdi_todo/core/dependencies.dart';
 import 'package:mdi_todo/core/services/notification_service.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';

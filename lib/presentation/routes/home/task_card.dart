@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mdi_todo/core/utils/format_date.dart';
 import 'package:mdi_todo/data/models/task.dart';
@@ -18,8 +17,13 @@ class TaskCard extends StatelessWidget {
         task.title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
+        style: const TextStyle(fontSize: 18),
       ),
-      subtitle: Text(formatDate(task.deadline)),
+      subtitle: Text(
+        formatDate(task.deadline),
+        style: const TextStyle(
+            color: Color.fromARGB(255, 134, 134, 134), fontSize: 16),
+      ),
       trailing: TaskCheckbox(task: task, isChecked: task.completedAt != null),
       onTap: () => onTap(),
     );

@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:mdi_todo/core/dependencies.dart';
-import 'package:mdi_todo/core/utils/format_date.dart';
 import 'package:mdi_todo/data/repositories/tasks_repository.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
 import 'package:mdi_todo/presentation/routes/home/task_card.dart';

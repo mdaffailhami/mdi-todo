@@ -16,4 +16,3 @@
 
 # Gson specific rules
 -keep class com.google.gson.** { *; }
--keep class sun.misc.Unsafe { *; }

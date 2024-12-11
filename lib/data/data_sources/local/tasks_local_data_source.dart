@@ -1,4 +1,3 @@
-import 'package:get_it/get_it.dart';
 import 'package:localstore/localstore.dart';
 import 'package:mdi_todo/core/dependencies.dart';
 import 'package:mdi_todo/data/models/task.dart';
