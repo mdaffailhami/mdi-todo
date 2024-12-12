@@ -14,9 +14,10 @@ class NotificationService {
       'task_channel',
       'Task Notifications',
       channelDescription: 'Channel for task reminders',
-      importance: Importance.high,
-      priority: Priority.high,
+      importance: Importance.max,
+      priority: Priority.max,
       icon: '@mipmap/ic_launcher',
+      largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),
     ),
   );
 
