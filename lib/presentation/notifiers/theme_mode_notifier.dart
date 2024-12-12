@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mdi_todo/core/dependencies.dart';
 import 'package:mdi_todo/data/repositories/theme_mode_repository.dart';
 
 class ThemeModeNotifier extends ChangeNotifier {
   ThemeMode _value = ThemeMode.system;
   ThemeMode get value => _value;
 
-  final ThemeModeRepository _repository = ThemeModeRepository();
+  final ThemeModeRepository _repository = locator<ThemeModeRepository>();
 
   void load() {
     late final ThemeMode? userThemeMode;

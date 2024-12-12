@@ -1,11 +1,15 @@
-import 'package:get_it/get_it.dart';
+import 'dart:convert';
+
+import 'package:home_widget/home_widget.dart';
+import 'package:mdi_todo/core/dependencies.dart';
 import 'package:mdi_todo/core/services/notification_service.dart';
+import 'package:mdi_todo/core/utils/format_date.dart';
 import 'package:mdi_todo/data/data_sources/local/tasks_local_data_source.dart';
 import 'package:mdi_todo/data/models/task.dart';
 
 class TasksRepository {
-  final _localDataSource = TasksLocalDataSource();
-  final _notificationService = GetIt.I.get<NotificationService>();
+  final _localDataSource = locator<TasksLocalDataSource>();
+  final _notificationService = locator<NotificationService>();
 
   Future<List<Task>> get() async {
     try {
@@ -117,5 +121,27 @@ class TasksRepository {
     await _notificationService.cancelNotification(int.parse(
       '2${task.id.substring(task.id.length - 5)}',
     ));
+  }
+
+  Future<void> saveAndUpdateActiveTasksWidget(List<Task> activeTasks) async {
+    // Save data for app widget
+    await HomeWidget.saveWidgetData(
+      'active_tasks',
+      jsonEncode(
+        activeTasks
+            .map((task) => {
+                  'id': task.id,
+                  'title': task.title,
+                  'deadline': formatDate(task.deadline),
+                })
+            .toList(),
+      ),
+    );
+
+    // Update (Notify to reload) app widget
+    await HomeWidget.updateWidget(
+      name: 'ActiveTasksWidgetReceiver',
+      androidName: 'ActiveTasksWidgetReceiver',
+    );
   }
 }

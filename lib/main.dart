@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:mdi_todo/core/dependencies.dart';
 import 'package:mdi_todo/core/services/notification_service.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
@@ -17,15 +16,15 @@ Future<void> main() async {
 
   if (defaultTargetPlatform == TargetPlatform.android) {
     // Initialize android notification service
-    await GetIt.I.get<NotificationService>().initialize();
+    await locator<NotificationService>().initialize();
     tz.initializeTimeZones();
   }
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ThemeModeNotifier()),
-        ChangeNotifierProvider(create: (_) => TasksNotifier()),
+        ChangeNotifierProvider(create: (_) => locator<ThemeModeNotifier>()),
+        ChangeNotifierProvider(create: (_) => locator<TasksNotifier>()),
       ],
       child: const MyApp(),
     ),

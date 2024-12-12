@@ -5,6 +5,8 @@ import 'package:mdi_todo/data/models/task.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
 import 'package:provider/provider.dart';
 
+import 'task_checkbox.dart';
+
 enum TaskFormDialogType {
   add,
   edit,
@@ -237,33 +239,52 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
                 topLeft: Radius.circular(22),
                 topRight: Radius.circular(22),
               ),
-              child: TextFormField(
-                onChanged: (value) => title = value,
-                readOnly: type == TaskFormDialogType.detail ? true : false,
-                autofocus: type == TaskFormDialogType.add ? true : false,
-                initialValue: title,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                ),
-                decoration: InputDecoration(
-                  hintText: type == TaskFormDialogType.detail
-                      ? ''
-                      : 'Type your task here..',
-                  filled: true,
-                  fillColor: Colors.transparent,
-                ),
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Task title is required!'
-                    : null,
-                onFieldSubmitted: (_) {
-                  if (type == TaskFormDialogType.add) {
-                    onAddTaskButtonPressed();
-                  }
-                  if (type == TaskFormDialogType.edit) {
-                    onEditTaskButtonPressed();
-                  }
-                },
-              ),
+              child: Builder(builder: (context) {
+                final textField = TextFormField(
+                  onChanged: (value) => title = value,
+                  readOnly: type == TaskFormDialogType.detail ? true : false,
+                  autofocus: type == TaskFormDialogType.add ? true : false,
+                  initialValue: title,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: type == TaskFormDialogType.detail
+                        ? ''
+                        : 'Type your task here..',
+                    filled: true,
+                    fillColor: Colors.transparent,
+                  ),
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Task title is required!'
+                      : null,
+                  onFieldSubmitted: (_) {
+                    if (type == TaskFormDialogType.add) {
+                      onAddTaskButtonPressed();
+                    }
+                    if (type == TaskFormDialogType.edit) {
+                      onEditTaskButtonPressed();
+                    }
+                  },
+                );
+
+                if (type == TaskFormDialogType.add) {
+                  return textField;
+                } else {
+                  return Row(
+                    children: [
+                      Expanded(child: textField),
+                      TaskCheckbox(
+                        task: widget.task!,
+                        isChecked: widget.task!.completedAt != null,
+                        onChanged: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                }
+              }),
             ),
             const SizedBox(height: 17),
             TextButton(
