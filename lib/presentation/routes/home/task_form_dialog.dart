@@ -5,6 +5,7 @@ import 'package:mdi_todo/data/models/task.dart';
 import 'package:mdi_todo/presentation/notifiers/tasks_notifier.dart';
 import 'package:provider/provider.dart';
 
+import 'delete_task_confirmation_dialog.dart';
 import 'task_checkbox.dart';
 
 enum TaskFormDialogType {
@@ -62,20 +63,6 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
       if (mounted) showSnackBar(context: context, label: e.toString());
     } finally {
       if (mounted) Navigator.pop(context);
-    }
-  }
-
-  Future<void> onDeleteTaskButtonPressed() async {
-    try {
-      await context.read<TasksNotifier>().delete(widget.task!);
-      if (mounted) showSnackBar(context: context, label: 'Delete task success');
-    } catch (e) {
-      if (mounted) showSnackBar(context: context, label: e.toString());
-    } finally {
-      if (mounted) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-      }
     }
   }
 
@@ -162,27 +149,12 @@ class _MyTaskFormDialogState extends State<MyTaskFormDialog> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(
-                        'Delete task',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: onDeleteTaskButtonPressed,
-                          child: const Text(
-                            'Delete',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      ],
-                      content: const Text(
-                          'Are you sure you want to delete this task?'),
+                    builder: (context) => DeleteTaskConfirmationDialog(
+                      task: widget.task!,
+                      onTaskDeleted: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
                     ),
                   );
                 },

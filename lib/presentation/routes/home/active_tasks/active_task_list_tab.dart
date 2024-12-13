@@ -93,6 +93,7 @@ class MyActiveTaskListTab extends StatelessWidget {
             ...activeTasks.map((task) {
               return TaskCard(
                 task: task,
+                showDeleteButton: false,
                 onTap: () {
                   showDialog(
                     context: context,

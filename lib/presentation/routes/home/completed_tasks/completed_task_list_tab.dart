@@ -45,6 +45,7 @@ class MyCompletedTaskListTab extends StatelessWidget {
             ...completedTasks.map((task) {
               return TaskCard(
                 task: task,
+                showDeleteButton: true,
                 onTap: () {
                   showDialog(
                     context: context,
